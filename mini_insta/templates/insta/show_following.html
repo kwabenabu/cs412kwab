@@ -1,0 +1,35 @@
+<!--file show_following.html-->
+<!-- author Kwabena -->
+<!-- Description: Template to display the list of profiles a user is following in the mini_insta app. -->
+<!-- mini_insta/templates/mini_insta/show_following.html -->
+{% extends 'insta/base.html' %}
+
+{% block title %}{{ profile.display_name }} is Following{% endblock %}
+
+{% block content %}
+<div class="profile-section">
+  <h2>Profiles {{ profile.display_name }} Follows ({{ profile.get_num_following }})</h2>
+  {% with following=profile.get_following %}
+    {% if following %}
+      <ul class="people-list">
+        {% for p in following %}
+          <li class="people-item">
+            <a href="{% url 'show_profile' p.pk %}">
+              <img src="{{ p.profile_image_url }}" alt="{{ p.display_name }}" class="avatar-sm"
+                   onerror="this.src='https://via.placeholder.com/40x40?text=?'">
+              <span>{{ p.display_name }}</span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>Not following anyone yet.</p>
+    {% endif %}
+  {% endwith %}
+
+  <div class="navigation">
+    <a class="btn" href="{% url 'show_profile' profile.pk %}">← Back to Profile</a>
+  </div>
+</div>
+{% endblock %}
+

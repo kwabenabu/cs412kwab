@@ -1,0 +1,30 @@
+{% extends 'dadjokes/base.html' %}
+
+{% block content %}
+<h1 class="page-title">😄 All Dad Jokes</h1>
+
+{% if jokes %}
+<div class="card-grid">
+    {% for joke in jokes %}
+    <div class="card joke-card">
+        <div class="card-title">Joke #{{ joke.id }}</div>
+        <div class="joke-text">{{ joke.text }}</div>
+        <div class="joke-author">— {{ joke.contributor }}</div>
+        <div style="font-size: 0.8rem; opacity: 0.7; margin-top: 0.5rem;">
+            {{ joke.created|date:"M j, Y" }}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card single-item">
+    <div class="card-title">😅 No Jokes Yet</div>
+    <p>Be the first to add a joke to our collection!</p>
+</div>
+{% endif %}
+
+<div class="text-center">
+    <a href="{% url 'dadjokes:show_random_joke' %}" class="btn">🎲 Random Joke</a>
+    <a href="{% url 'dadjokes:show_all_pictures' %}" class="btn btn-secondary">📸 View Pictures</a>
+</div>
+{% endblock %}

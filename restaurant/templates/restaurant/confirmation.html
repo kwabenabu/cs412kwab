@@ -1,0 +1,33 @@
+<!-- file confirmation.html
+Author: Kwabena
+Description: Confirmation page for restaurant app displaying order details and customer information. -->
+<!-- restaurant/templates/restaurant/confirmation.html -->
+{% extends 'restaurant/base.html' %}
+
+{% block content %}
+<h1>Order Confirmation</h1>
+<p>Thank you for your order, {{ customer_name }}!</p>
+<h2>Items Ordered:</h2>
+<ul>
+{% for item in selected_items %}
+<!-- context -->
+	<li>{{ item }}</li>
+{% endfor %}
+</ul>
+{% if pizza_toppings %}
+	<h3>Pizza Toppings:</h3>
+	<!-- ul-->
+	<ul>
+	{% for topping in pizza_toppings %}
+		<li>{{ topping }}</li>
+	{% endfor %}
+	</ul>
+{% endif %}
+<!-- p total -->
+<p><strong>Total:</strong> {{ total }}</p>
+<p>Special Instructions: {{ instructions }}</p>
+<p>Name: {{ customer_name }}</p>
+<p>Phone: {{ customer_phone }}</p>
+<p>Email: {{ customer_email }}</p>
+<p>Your order will be ready at {{ ready_time }}.</p>
+{% endblock %}

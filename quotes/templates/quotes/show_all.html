@@ -1,0 +1,21 @@
+<!-- quotes/templates/quotes/show_all.html -->
+{% extends 'quotes/base.html' %}
+<!-- extends simplifies the amount of code i need to type out  -->
+{% block content %}
+<!-- this is just an h1 and paragrpah -->
+<h1>These are all my quotes from Karl Marx</h1>
+<p> Which one do you think is best </p>
+<!--https://docs.djangoproject.com/en/5.2/ref/templates/language/?utm_source=chatgpt.com-->
+<!--got this from the django template doc linked above titled for loop-->
+    {% for quote in quotes %}
+    <!-- this is just quote in context -->
+  <li>{{ quote }}</li>
+{% endfor %}
+<!--simple header-->
+<h5> These are all my Karl Marx Pictures which one do you think is best?</h5>
+<!-- same for loop from django template doc -->
+{% for image in images %}
+  <img src="{{ image }}" alt="Image">
+  
+{% endfor %}
+{% endblock %}

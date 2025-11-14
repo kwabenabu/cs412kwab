@@ -1,0 +1,64 @@
+<!-- file base.html -->
+<!-- author Kwabena -->
+<!-- Description: Base template for mini_insta app with static file loading and content block. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mini Instagram{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles_insta.css' %}">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1><a href="{% url 'show_all_profiles' %}">Mini Instagram</a></h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'show_all_profiles' %}">All Profiles</a></li>
+                {% if user.is_authenticated %}
+                  <li><a href="{% url 'show_feed' %}">Home</a></li>
+                  {% if profile %}
+                    <li><a href="{% url 'show_profile' profile.pk %}">Profile</a></li>
+                  {% endif %}
+                  <li><a href="{% url 'search' %}">Search</a></li>
+                  <li><a href="{% url 'update_profile' %}">Update Profile</a></li>
+                  <li><a href="{% url 'create_post' %}">Create Post</a></li>
+                  <li>
+                    <form action="{% url 'logout' %}" method="post" class="inline-form">
+                      {% csrf_token %}
+                      <button type="submit">Logout</button>
+                    </form>
+                  </li>
+                {% else %}
+                  <li><a href="{% url 'login' %}?next={% url 'show_all_profiles' %}">Login</a></li>
+                  <li><a href="{% url 'create_profile' %}">Register</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}
+        <!-- Content from child templates will be inserted here -->
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Mini Instagram. All rights reserved.</p>
+        <p><a href="{% url 'show_all_profiles' %}">View All Profiles</a></p>
+        
+        <div class="footer-content">
+          {% if user.is_authenticated %}
+            Logged in as: {{ user.username }}
+          {% else %}
+            Not logged in
+          {% endif %}
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!-- file search_results.html-->
+<!-- author Kwabena -->
+<!-- Description: Template to display search results for profiles and posts in the mini_insta app. -->
+ <!-- mini_insta/templates/mini_insta/search_results.html -->
+  
+{% extends 'insta/base.html' %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+<div class="profile-section">
+  <h2>Search Results for “{{ query }}”</h2>
+  <p><a class="btn" href="{% url 'search' %}">New Search</a></p>
+
+  <h3>Profiles</h3>
+  {% if matching_profiles %}
+    <ul class="people-list">
+      {% for p in matching_profiles %}
+        <li class="people-item">
+          <a href="{% url 'show_profile' p.pk %}">
+            <img src="{{ p.profile_image_url }}" alt="{{ p.display_name }}" class="avatar-sm"
+                 onerror="this.src='https://via.placeholder.com/40x40?text=?'">
+            <span>{{ p.display_name }}</span>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No profiles matched your search.</p>
+  {% endif %}
+
+  <h3>Posts</h3>
+  {% if posts %}
+    <ul class="post-results">
+      {% for post in posts %}
+        <li>
+          <a href="{% url 'show_post' post.pk %}"><strong>{{ post.profile.display_name }}</strong></a> — {{ post.caption|default:"(no caption)"|truncatewords:20 }}
+          <div class="meta">{{ post.timestamp|date:"M j, Y g:i A" }} • ❤️ {{ post.get_likes.count }}</div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No posts matched your search.</p>
+  {% endif %}
+
+  <div class="navigation">
+    <a class="btn" href="{% url 'show_profile' profile.pk %}">← Back to Profile</a>
+    <a class="btn" href="{% url 'show_feed' %}">Go to Feed</a>
+  </div>
+</div>
+{% endblock %}

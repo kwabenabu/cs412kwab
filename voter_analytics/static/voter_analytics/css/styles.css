@@ -1,0 +1,65 @@
+/*
+Voter Analytics Application Styles
+Author: [Your Name] <[your_email@bu.edu]>
+Description: CSS styles for the voter analytics Django application
+*/
+
+/* Base template styles */
+.navbar-brand {
+    font-weight: bold;
+}
+
+.voter-card:hover {
+    transform: translateY(-2px);
+    transition: transform 0.2s;
+}
+
+.filter-form {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.stats-card {
+    border-left: 4px solid #007bff;
+}
+
+.voting-history .badge {
+    margin: 2px;
+}
+
+.progress {
+    height: 20px;
+}
+
+/* Voter list template styles */
+.btn-clear-filters {
+    background-color: #6c757d;
+    margin-top: 5px;
+}
+
+.navigation-links {
+    margin: 20px 0;
+}
+
+.btn-analytics {
+    background-color: #28a745;
+}
+
+.btn-view-details {
+    font-size: 12px;
+    padding: 5px 10px;
+}
+
+.no-voters-message {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+/* Progress bar styles for voter detail */
+.voter-progress-bar {
+    /* Dynamic width will be set by Django template */
+    min-width: 10px;
+}

@@ -1,0 +1,68 @@
+<!-- file show_all_profiles.html -->
+<!-- author Kwabena -->
+<!-- Description: Template to display all user profiles in the mini_insta app. -->
+
+
+<!-- mini_insta/templates/mini_insta/show_all_profiles.html -->
+
+{% extends 'insta/base.html' %}
+
+{% block title %}All Profiles - Mini Instagram{% endblock %}
+
+{% block content %}
+<h1>All Profiles</h1>
+
+<div class="profile-grid">
+    {% for profile in profiles %}
+    <div class="profile-card">
+        <!-- Profile Image with Link -->
+        <a href="{% url 'show_profile' profile.pk %}">
+            <img src="{{ profile.profile_image_url }}" 
+                 alt="{{ profile.display_name }}'s profile picture"
+                 onerror="this.src='https://via.placeholder.com/80x80/cccccc/666666?text=No+Image'">
+        </a>
+        
+        <!-- Display Name with Link -->
+        <h2><a href="{% url 'show_profile' profile.pk %}">{{ profile.display_name }}</a></h2>
+        
+        <!-- Bio Text -->
+        <p>
+                <!-- citation for if block -->
+                <!-- https://docs.djangoproject.com/en/stable/ref/templates/builtins/#if -->
+            {% if profile.bio_text %}
+
+                {% if profile.bio_text|length > 100 %}
+                
+                    {{ profile.bio_text }}
+                {% else %}
+                    {{ profile.bio_text }}
+                {% endif %}
+            {% else %}
+                No bio available
+            {% endif %}
+        </p>
+        
+        <!-- Join Date -->
+         <!-- citation for date filter
+         https://docs.djangoproject.com/en/stable/ref/templates/builtins/#date -->
+        <p><strong>Joined:</strong> {{ profile.join_date|date:"M d, Y" }}</p>
+        
+        <!-- Link to Profile -->
+        <p><a href="{% url 'show_profile' profile.pk %}" class="btn">View Profile</a></p>
+    </div>
+    {% empty %}
+    <div class="empty-state">
+        <h2>No profiles found</h2>
+        <p>There are currently no profiles to display.</p>
+    </div>
+    {% endfor %}
+</div>
+
+{% if profiles %}
+<div class="profile-count">
+    <!-- citation for length filter
+    https://docs.djangoproject.com/en/stable/ref/templates/builtins/#length -->
+    <p>Showing {{ profiles|length }} profile{{ profiles|length|pluralize }}</p>
+</div>
+{% endif %}
+{% endblock %}

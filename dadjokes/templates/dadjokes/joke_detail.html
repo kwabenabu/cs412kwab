@@ -1,0 +1,86 @@
+{% extends 'dadjokes/base.html' %}
+
+{% block title %}Joke #{{ joke.id }} - Dad Jokes Premium{% endblock %}
+
+{% block content %}
+  <div class="text-center mb-8">
+    <h1 class="page-title">🎭 Featured Dad Joke</h1>
+    <p class="text-muted">Joke #{{ joke.id }} from our premium collection</p>
+  </div>
+
+  <!-- Main Joke Card -->
+  <div class="card joke-card card-single" style="max-width: 800px;">
+    <div style="text-align: center; margin-bottom: var(--space-4);">
+      <div style="font-size: 3rem; margin-bottom: var(--space-2);">😄</div>
+      <h2 style="color: white; margin-bottom: var(--space-6);">Premium Dad Humor</h2>
+    </div>
+    
+    <div class="joke-text" style="font-size: 1.25rem; text-align: center; line-height: 1.8;">
+      {{ joke.text }}
+    </div>
+    
+    <div class="joke-author" style="font-size: 1rem; margin-top: var(--space-6);">
+      — {{ joke.contributor }}
+    </div>
+    
+    <div style="text-align: center; font-size: 0.875rem; opacity: 0.7; margin-top: var(--space-2);">
+      {{ joke.created|date:"l, F j, Y \a\\t g:i A" }}
+    </div>
+  </div>
+
+  <!-- Interaction Section -->
+  <div class="card card-single">
+    <h3 class="section-title text-center">💫 Enjoyed This Joke?</h3>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); text-align: center; margin: var(--space-6) 0;">
+      <div style="padding: var(--space-4); background: var(--gray-50); border-radius: var(--radius);">
+        <div style="font-size: 2rem; margin-bottom: var(--space-2);">⭐</div>
+        <div style="font-weight: 600;">Rate This Joke</div>
+        <div class="text-muted">Coming Soon!</div>
+      </div>
+      
+      <div style="padding: var(--space-4); background: var(--gray-50); border-radius: var(--radius);">
+        <div style="font-size: 2rem; margin-bottom: var(--space-2);">🔗</div>
+        <div style="font-weight: 600;">Share with Friends</div>
+        <div class="text-muted">Spread the laughs!</div>
+      </div>
+      
+      <div style="padding: var(--space-4); background: var(--gray-50); border-radius: var(--radius);">
+        <div style="font-size: 2rem; margin-bottom: var(--space-2);">💾</div>
+        <div style="font-weight: 600;">Save to Favorites</div>
+        <div class="text-muted">Never lose it!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="text-center mt-8">
+    <a href="{% url 'dadjokes:jokes' %}" class="btn btn-primary" style="margin-right: var(--space-2);">
+      ← Back to All Jokes
+    </a>
+    <a href="{% url 'dadjokes:home' %}" class="btn btn-secondary">
+      🎲 Random Joke + Picture
+    </a>
+  </div>
+
+  <!-- Related Content -->
+  <div class="card card-single mt-8">
+    <h3 class="section-title text-center">🔥 More Premium Content</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-4);">
+      <div style="text-align: center;">
+        <div style="font-size: 2rem; margin-bottom: var(--space-2);">😂</div>
+        <h4 style="margin-bottom: var(--space-2);">More Jokes</h4>
+        <p class="text-muted">Discover our entire collection</p>
+        <a href="{% url 'dadjokes:jokes' %}" class="btn btn-secondary">Browse All</a>
+      </div>
+      
+      <div style="text-align: center;">
+        <div style="font-size: 2rem; margin-bottom: var(--space-2);">📸</div>
+        <h4 style="margin-bottom: var(--space-2);">Funny Pictures</h4>
+        <p class="text-muted">Visual humor at its finest</p>
+        <a href="{% url 'dadjokes:pictures' %}" class="btn btn-secondary">View Gallery</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+

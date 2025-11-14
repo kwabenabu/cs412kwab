@@ -1,0 +1,29 @@
+{% extends 'dadjokes/base.html' %}
+
+{% block title %}Joke Details - Dad Jokes Premium{% endblock %}
+
+{% block content %}
+  <h1 class="page-title">😄 Joke Details</h1>
+  
+  <div class="card card-single">
+    <div class="joke-text" style="font-size: 1.25rem; margin-bottom: var(--space-4);">
+      {{ joke.text }}
+    </div>
+    
+    <div class="joke-meta">
+      <div class="joke-author">— {{ joke.contributor }}</div>
+      <div style="font-size: 0.875rem; opacity: 0.7; margin-top: var(--space-2);">
+        Added on {{ joke.created|date:"F j, Y \a\t g:i A" }}
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center mt-8">
+    <a href="{% url 'dadjokes:show_all_jokes' %}" class="btn btn-secondary" style="margin-right: var(--space-2);">
+      ← Back to All Jokes
+    </a>
+    <a href="{% url 'dadjokes:show_random_joke' %}" class="btn btn-primary">
+      🎲 Show Random Joke
+    </a>
+  </div>
+{% endblock %}

@@ -1,0 +1,36 @@
+<!-- file show_followers.html -->
+<!-- author Kwabena -->
+<!-- Description: Template to display the list of followers of a user profile in the mini_insta app. -->
+ <!-- mini_insta/templates/mini_insta/show_followers.html -->
+{% extends 'insta/base.html' %}
+
+{% block title %}Followers of {{ profile.display_name }}{% endblock %}
+
+{% block content %}
+<div class="profile-section">
+  <h2>Followers of {{ profile.display_name }} ({{ profile.get_num_followers }})</h2>
+  {% with followers=profile.get_followers %}
+    {% if followers %}
+      <ul class="people-list">
+        {% for p in followers %}
+          <li class="people-item">
+            <a href="{% url 'show_profile' p.pk %}">
+              <img src="{{ p.profile_image_url }}" alt="{{ p.display_name }}" class="avatar-sm"
+                   onerror="this.src='https://via.placeholder.com/40x40?text=?'">
+              <span>{{ p.display_name }}</span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No followers yet.</p>
+    {% endif %}
+  {% endwith %}
+
+  <div class="navigation">
+    <a class="btn" href="{% url 'show_profile' profile.pk %}">← Back to Profile</a>
+  </div>
+  
+</div>
+{% endblock %}
+

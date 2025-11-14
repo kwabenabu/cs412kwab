@@ -1,0 +1,22 @@
+<!-- file search.html-->
+<!-- author Kwabena -->
+<!-- Description: Template for searching profiles and posts in the mini_insta app. -->
+ <!-- mini_insta/templates/mini_insta/search.html -->
+{% extends 'insta/base.html' %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+<div class="profile-section">
+  <h2>Search</h2>
+  <form action="{% url 'search' %}" method="get" class="search-form">
+    <input type="text" name="query" placeholder="Search profiles and posts" required class="search-input" />
+    <button type="submit" class="btn">Search</button>
+  </form>
+
+  <div class="navigation">
+    <a class="btn" href="{% url 'show_profile' profile.pk %}">← Back to Profile</a>
+    <a class="btn" href="{% url 'show_feed' %}">Go to Feed</a>
+  </div>
+</div>
+{% endblock %}

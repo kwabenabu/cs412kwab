@@ -1,0 +1,27 @@
+<!-- quotes/templates/base.html -->
+{% load static %}
+<html>
+<head>
+    <title>Welcome to Kwabena's Quotes</title>
+    <link rel="stylesheet"  href="{% static 'styles.css' %}">
+</head>
+<body>
+     <h1> Welcome to Kwabena's Quotes</h1>
+    <nav> 
+        <!--nav simply from the blackboard-->
+        <a href="{% url 'quotes_page' %}">quote</a> 
+        <a href="{% url 'about_page' %}">About</a>
+        <a href="{% url 'show_all_page' %}">Show All</a>
+    </nav>
+  
+   {% block content %}
+
+   {% endblock %}
+    <footer>
+      
+        <br>
+        <br>
+    </footer>
+</body>
+
+</html>

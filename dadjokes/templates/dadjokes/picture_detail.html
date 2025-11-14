@@ -1,0 +1,116 @@
+{% extends 'dadjokes/base.html' %}
+
+{% block title %}Picture #{{ picture.id }} - Dad Jokes Premium{% endblock %}
+
+{% block content %}
+  <div class="text-center mb-8">
+    <h1 class="page-title">📸 Featured Funny Picture</h1>
+    <p class="text-muted">Picture #{{ picture.id }} from our comedy gallery</p>
+  </div>
+
+  <!-- Main Picture Card -->
+  <div class="card card-single" style="max-width: 900px;">
+    <div style="text-align: center; margin-bottom: var(--space-6);">
+      <div style="font-size: 3rem; margin-bottom: var(--space-2);">🎨</div>
+      <h2 style="color: var(--gray-800); margin-bottom: var(--space-4);">Premium Visual Humor</h2>
+    </div>
+    
+    <!-- Full Size Image -->
+    <div style="text-align: center; margin-bottom: var(--space-6);">
+      <img src="{{ picture.image_url }}" 
+           alt="Funny picture by {{ picture.contributor }}" 
+           style="max-width: 100%; height: auto; max-height: 500px; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);" />
+    </div>
+    
+    <!-- Picture Info -->
+    <div style="text-align: center; padding: var(--space-4); background: var(--gray-50); border-radius: var(--radius);">
+      <div style="font-size: 1.125rem; font-weight: 600; color: var(--gray-800); margin-bottom: var(--space-2);">
+        📷 Contributed by {{ picture.contributor }}
+      </div>
+      <div class="text-muted">
+        {{ picture.created|date:"l, F j, Y \a\\t g:i A" }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Interaction Section -->
+  <div class="card card-single">
+    <h3 class="section-title text-center">💫 Love This Picture?</h3>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); text-align: center; margin: var(--space-6) 0;">
+      <div style="padding: var(--space-4); background: var(--gray-50); border-radius: var(--radius);">
+        <div style="font-size: 2rem; margin-bottom: var(--space-2);">⭐</div>
+        <div style="font-weight: 600;">Rate This Picture</div>
+        <div class="text-muted">Coming Soon!</div>
+      </div>
+      
+      <div style="padding: var(--space-4); background: var(--gray-50); border-radius: var(--radius);">
+        <div style="font-size: 2rem; margin-bottom: var(--space-2);">📤</div>
+        <div style="font-weight: 600;">Share & Download</div>
+        <div class="text-muted">Spread the joy!</div>
+      </div>
+      
+      <div style="padding: var(--space-4); background: var(--gray-50); border-radius: var(--radius);">
+        <div style="font-size: 2rem; margin-bottom: var(--space-2);">📁</div>
+        <div style="font-weight: 600;">Add to Collection</div>
+        <div class="text-muted">Save for later!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Technical Details -->
+  <div class="card card-single">
+    <h3 class="section-title">🔍 Picture Details</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4);">
+      <div>
+        <strong>📊 Picture ID:</strong><br>
+        <span class="text-muted">#{{ picture.id }}</span>
+      </div>
+      <div>
+        <strong>👤 Contributor:</strong><br>
+        <span class="text-muted">{{ picture.contributor }}</span>
+      </div>
+      <div>
+        <strong>📅 Upload Date:</strong><br>
+        <span class="text-muted">{{ picture.created|date:"M j, Y" }}</span>
+      </div>
+      <div>
+        <strong>🔗 Source URL:</strong><br>
+        <span class="text-muted" style="word-break: break-all; font-size: 0.75rem;">
+          {{ picture.image_url|truncatechars:30 }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="text-center mt-8">
+    <a href="{% url 'dadjokes:pictures' %}" class="btn btn-primary" style="margin-right: var(--space-2);">
+      ← Back to Gallery
+    </a>
+    <a href="{% url 'dadjokes:home' %}" class="btn btn-secondary">
+      🎲 Random Content
+    </a>
+  </div>
+
+  <!-- Related Content -->
+  <div class="card card-single mt-8">
+    <h3 class="section-title text-center">🔥 More Premium Content</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-4);">
+      <div style="text-align: center;">
+        <div style="font-size: 2rem; margin-bottom: var(--space-2);">📸</div>
+        <h4 style="margin-bottom: var(--space-2);">More Pictures</h4>
+        <p class="text-muted">Browse our complete gallery</p>
+        <a href="{% url 'dadjokes:pictures' %}" class="btn btn-secondary">View All</a>
+      </div>
+      
+      <div style="text-align: center;">
+        <div style="font-size: 2rem; margin-bottom: var(--space-2);">😂</div>
+        <h4 style="margin-bottom: var(--space-2);">Dad Jokes</h4>
+        <p class="text-muted">Text-based humor collection</p>
+        <a href="{% url 'dadjokes:jokes' %}" class="btn btn-secondary">Read Jokes</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+

@@ -1,0 +1,59 @@
+<!-- file base.html
+Author: Kwabena
+Description: Main page for restaurant app displaying restaurant info, hours, and a form to submit favorite -->
+<!-- restaurant/templates/restaurant/main.html -->
+{% extends 'restaurant/base.html' %}
+<!-- comment -->
+{% block content %}
+<div>
+  <!--h1-->
+    <h1>Welcome to Kwabies Seafood</h1>
+    <h2>73, Nepean Sea Rd, opp. Petit Hall, Vasant Vihar, Malabar Hill, Mumbai, Maharashtra 400006, India</h2>
+    <table>
+  <tr>
+    <th>Day</th>
+    <th>Open</th>
+    <th>Close</th>
+  </tr>
+  <tr>
+    <!--td-->
+    <td>Monday</td>
+    <td>11:00 AM</td>
+    <td>9:00 PM</td>
+  </tr>
+  <tr>
+    <td>Tuesday</td>
+    <td>11:00 AM</td>
+    <td>9:00 PM</td>
+  </tr>
+  <tr>
+    <td>Wednesday</td>
+    <td>11:00 AM</td>
+    <td>9:00 PM</td>
+  </tr>
+  <tr>
+    <td>Thursday</td>
+    <td>11:00 AM</td>
+    <td>9:00 PM</td>
+  </tr>
+  <tr>
+    <td>Friday</td>
+    <td>11:00 AM</td>
+    <td>10:00 PM</td>
+  </tr>
+  <tr>
+    <td>Saturday</td>
+    <td>12:00 PM</td>
+    <td>10:00 PM</td>
+  </tr>
+  <tr>
+    <td>Sunday</td>
+    <td>12:00 PM</td>
+    <td>8:00 PM</td>
+  </tr>
+</table>
+
+    <p>Please fill out the form to submit your favorite dish.</p>
+  <img src="{{ image }}" alt="Restaurant Image" width="600">
+</div>
+{% endblock content %}

@@ -1,0 +1,157 @@
+{% extends "voter_analytics/base.html" %}
+<!-- file voter_detail.html -->
+<!-- author Kwabena -->
+<!-- Description: Template for displaying detailed information about a specific voter in the voter_analytics app. -->
+ 
+<!-- {% block title %}{{ voter.first_name }} {{ voter.last_name }} - Voter Details{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'voter_analytics:voters' %}">Voters</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ voter.first_name }} {{ voter.last_name }}</li>
+                </ol>
+            </nav>
+            
+            <h1>{{ voter.first_name }} {{ voter.last_name }}</h1>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Personal Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <dl class="row">
+                                <dt class="col-sm-4">Name:</dt>
+                                <dd class="col-sm-8">{{ voter.first_name }} {{ voter.last_name }}</dd>
+                                
+                                <dt class="col-sm-4">Address:</dt>
+                                <dd class="col-sm-8">
+                                    {{ voter.full_address }}
+                                    <br>
+                                    <a href="https://maps.google.com/?q={{ voter.full_address|urlencode }}" 
+                                       target="_blank" class="btn btn-sm btn-outline-primary mt-1">
+                                        📍 View on Google Maps
+                                    </a>
+                                </dd>
+                                
+                                <dt class="col-sm-4">Date of Birth:</dt>
+                                <dd class="col-sm-8">{{ voter.dob|date:"F j, Y" }}</dd>
+                                
+                                <dt class="col-sm-4">Age:</dt>
+                                <dd class="col-sm-8">{{ voter.age }} years old</dd>
+                                
+                                <dt class="col-sm-4">Registration Date:</dt>
+                                <dd class="col-sm-8">{{ voter.registration_date|date:"F j, Y" }}</dd>
+                                
+                                <dt class="col-sm-4">Party Affiliation:</dt>
+                                <dd class="col-sm-8">
+                                    {% if voter.party %}
+                                        <span class="badge bg-primary">{{ voter.party }}</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Unaffiliated</span>
+                                    {% endif %}
+                                </dd>
+                                
+                                <dt class="col-sm-4">Precinct:</dt>
+                                <dd class="col-sm-8">{{ voter.precinct }}</dd>
+                                
+                                <dt class="col-sm-4">Voter Score:</dt>
+                                <dd class="col-sm-8">
+                                    <span class="badge bg-info">{{ voter.voter_score }}/5</span>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Voting History</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="voting-history">
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>2020 State Election</span>
+                                        {% if voter.v20state %}
+                                            <span class="badge bg-success">Voted</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Did Not Vote</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>2021 Town Election</span>
+                                        {% if voter.v21town %}
+                                            <span class="badge bg-success">Voted</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Did Not Vote</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>2021 Primary Election</span>
+                                        {% if voter.v21primary %}
+                                            <span class="badge bg-success">Voted</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Did Not Vote</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>2022 General Election</span>
+                                        {% if voter.v22general %}
+                                            <span class="badge bg-success">Voted</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Did Not Vote</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>2023 Town Election</span>
+                                        {% if voter.v23town %}
+                                            <span class="badge bg-success">Voted</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Did Not Vote</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-3">
+                                <div class="progress">
+                                    {% widthratio voter.voter_score 5 100 as percentage %}
+                                    <div class="progress-bar voter-progress-bar" role="progressbar" style="width: {{ percentage }}%;" 
+                                         aria-valuenow="{{ voter.voter_score }}" aria-valuemin="0" aria-valuemax="5">
+                                        {{ voter.voter_score }}/5 Elections
+                                    </div>
+                                </div>
+                                <small class="text-muted">Participation Rate</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4">
+                <a href="{% url 'voter_analytics:voters' %}" class="btn btn-secondary">← Back to Voter List</a>
+                <a href="{% url 'voter_analytics:graphs' %}" class="btn btn-info">View Analytics</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} -->

@@ -1,0 +1,11 @@
+<!--file logged_out.html-->
+<!--author Kwabena -->
+<!--Description: Template for logged out page in the mini_insta app.-->
+{% extends "insta/base.html" %}
+{% block title %}Logged out{% endblock %}
+{% block content %}
+  <h2>Logged out</h2>
+  <p>You have been logged out.</p>
+  <p><a href="{% url 'login' %}">Log in again</a></p>
+{% endblock %}
+

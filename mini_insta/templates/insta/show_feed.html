@@ -1,0 +1,73 @@
+<!-- file show_feed.html -->
+<!-- author Kwabena -->
+<!-- Description: Template to display the feed of posts for a user profile in the mini_insta app. -->
+<!-- mini_insta/templates/mini_insta/show_feed.html -->
+{% extends 'insta/base.html' %}
+
+{% block title %}Feed for {{ profile.display_name }}{% endblock %}
+
+{% block content %}
+<div class="profile-section">
+  <h2>{{ profile.display_name }}'s Feed</h2>
+  {% if posts %}
+    <div class="feed-list">
+      {% for post in posts %}
+        <div class="feed-item">
+          <div class="post-header">
+            <div class="post-author-info">
+              <img src="{{ post.profile.profile_image_url }}" alt="{{ post.profile.display_name }}" class="post-author-avatar"
+                   onerror="this.src='https://via.placeholder.com/50x50?text=?'">
+              <div class="post-author-details">
+                <h3><a href="{% url 'show_profile' post.profile.pk %}">{{ post.profile.display_name }}</a></h3>
+                <p class="post-timestamp">{{ post.timestamp|date:"F j, Y \a\t g:i A" }}</p>
+              </div>
+            </div>
+          </div>
+
+          <a class="post-link" href="{% url 'show_post' post.pk %}">
+            {% with first_photo=post.get_all_photos.first %}
+              {% if first_photo %}
+                <img class="post-photo" src="{{ first_photo.get_image_url }}" alt="Post photo"
+                     onerror="this.src='https://via.placeholder.com/600x400?text=No+Image'">
+              {% else %}
+                <img class="post-photo" src="https://via.placeholder.com/600x400?text=No+Image" alt="No image">
+              {% endif %}
+            {% endwith %}
+          </a>
+
+          <div class="post-body">
+            <div class="likes">❤️ {{ post.get_likes.count }} like{{ post.get_likes.count|pluralize }}</div>
+            {% if post.caption %}
+              <p class="post-caption">{{ post.caption }}</p>
+            {% endif %}
+
+            {% with comments=post.get_all_comments %}
+              {% if comments %}
+                <div class="comments">
+                  <h4>Comments</h4>
+                  <ul>
+                    {% for c in comments %}
+                      <li>
+                        <a href="{% url 'show_profile' c.profile.pk %}"><strong>{{ c.profile.display_name }}</strong></a>
+                        <span class="comment-time">• {{ c.timestamp|date:"M j, g:i A" }}</span>
+                        <div class="comment-text">{{ c.text }}</div>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+            {% endwith %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No posts in your feed yet. Follow some profiles to see posts here.</p>
+  {% endif %}
+
+  <div class="navigation">
+    <a class="btn" href="{% url 'show_profile' profile.pk %}">← Back to Profile</a>
+  </div>
+</div>
+{% endblock %}
+

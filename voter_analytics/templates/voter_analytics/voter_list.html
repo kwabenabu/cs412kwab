@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<!-- file voter_list.html -->
+<!-- author Kwabena -->
+ <!-- Description: Template for displaying the voter list with filtering options in the voter_analytics app. -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voter Analytics - Voter List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        .filter-section {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .filter-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: end;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .filter-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        .filter-group input, .filter-group select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .stats {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+        }
+        .voter-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .voter-table th, .voter-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .voter-table th {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+        }
+        .voter-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .pagination a {
+            color: #007bff;
+            text-decoration: none;
+            margin: 0 5px;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .pagination a:hover {
+            background-color: #e9ecef;
+        }
+        .current-page {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+        }
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗳️ Voter Analytics Dashboard</h1>
+        
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <h3>Filter Voters</h3>
+            <form method="GET" class="filter-form">
+                {% if filter_form %}
+                    <div class="filter-group">
+                        <label for="{{ filter_form.party.id_for_label }}">Party:</label>
+                        {{ filter_form.party }}
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="{{ filter_form.dob_min_year.id_for_label }}">Birth Year (Min):</label>
+                        {{ filter_form.dob_min_year }}
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="{{ filter_form.dob_max_year.id_for_label }}">Birth Year (Max):</label>
+                        {{ filter_form.dob_max_year }}
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="{{ filter_form.voter_score.id_for_label }}">Voter Score:</label>
+                        {{ filter_form.voter_score }}
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Elections Participated:</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                {{ filter_form.v20state }}
+                                <label for="{{ filter_form.v20state.id_for_label }}">2020 State</label>
+                            </div>
+                            <div class="checkbox-item">
+                                {{ filter_form.v21town }}
+                                <label for="{{ filter_form.v21town.id_for_label }}">2021 Town</label>
+                            </div>
+                            <div class="checkbox-item">
+                                {{ filter_form.v21primary }}
+                                <label for="{{ filter_form.v21primary.id_for_label }}">2021 Primary</label>
+                            </div>
+                            <div class="checkbox-item">
+                                {{ filter_form.v22general }}
+                                <label for="{{ filter_form.v22general.id_for_label }}">2022 General</label>
+                            </div>
+                            <div class="checkbox-item">
+                                {{ filter_form.v23town }}
+                                <label for="{{ filter_form.v23town.id_for_label }}">2023 Town</label>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <div class="filter-group">
+                    <button type="submit" class="btn">🔍 Apply Filters</button>
+                    <a href="{% url 'voter_analytics:voters' %}" class="btn btn-clear-filters">🔄 Clear Filters</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats">
+            <strong>📊 Results:</strong> 
+            Showing {{ filtered_count|default:0 }} of {{ total_count|default:0 }} total voters
+            {% if page_obj %}
+                | Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            {% endif %}
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="navigation-links">
+            <a href="{% url 'voter_analytics:voters' %}" class="btn">📋 Voter List</a>
+            <a href="{% url 'voter_analytics:graphs' %}" class="btn btn-analytics">📈 Analytics Graphs</a>
+        </div>
+
+        <!-- Voter Table -->
+        {% if voters %}
+            <table class="voter-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Date of Birth</th>
+                        <th>Party</th>
+                        <th>Voter Score</th>
+                        <th>Election Participation</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for voter in voters %}
+                        <tr>
+                            <td>
+                                <strong>{{ voter.first_name }} {{ voter.last_name }}</strong>
+                            </td>
+                            <td>
+                                {{ voter.street_number }} {{ voter.street_name }}<br>
+                                {{ voter.apartment|default:"" }}
+                                {{ voter.zipcode }}
+                            </td>
+                            <td>{{ voter.dob|date:"M d, Y"|default:"N/A" }}</td>
+                            <td>{{ voter.party|default:"Unaffiliated" }}</td>
+                            <td>{{ voter.voter_score }}</td>
+                            <td>
+                                <small>
+                                    {% if voter.v20state %}✓ 2020 State{% endif %}
+                                    {% if voter.v21town %}✓ 2021 Town{% endif %}
+                                    {% if voter.v21primary %}✓ 2021 Primary{% endif %}
+                                    {% if voter.v22general %}✓ 2022 General{% endif %}
+                                    {% if voter.v23town %}✓ 2023 Town{% endif %}
+                                </small>
+                            </td>
+                            <td>
+                                <a href="{% url 'voter_analytics:voter' voter.pk %}" class="btn btn-view-details">👁️ View Details</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="no-voters-message">
+                <h3>🔍 No voters found</h3>
+                <p>Try adjusting your filter criteria or clear all filters to see results.</p>
+            </div>
+        {% endif %}
+
+        <!-- Pagination -->
+        {% if page_obj %}
+            <div class="pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">« First</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">‹ Previous</a>
+                {% endif %}
+
+                <span class="current-page">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">Next ›</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">Last »</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

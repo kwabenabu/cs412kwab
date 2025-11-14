@@ -1,0 +1,58 @@
+{% extends 'dadjokes/base.html' %}
+
+{% block title %}All Jokes - Dad Jokes Premium{% endblock %}
+
+{% block content %}
+  <h1 class="page-title">😄 Complete Joke Collection</h1>
+  
+  <div class="text-center mb-6">
+    <p class="text-muted">Every joke in our premium collection, ready to make you smile</p>
+  </div>
+
+  {% if jokes %}
+    <div class="card-grid">
+      {% for joke in jokes %}
+        <div class="card joke-card">
+          <div class="joke-text">{{ joke.text }}</div>
+          <div class="joke-author">— {{ joke.contributor }}</div>
+          <div style="font-size: 0.75rem; opacity: 0.7; margin-top: var(--space-2);">
+            {{ joke.created|date:"M j, Y g:i A" }}
+          </div>
+          <div class="mt-8">
+            <a href="{% url 'dadjokes:joke_detail' joke.id %}" class="btn" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3);">
+              📖 Read Full Joke
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Pagination or Load More could go here -->
+    <div class="text-center mt-8">
+      <p class="text-muted">Showing {{ jokes|length }} joke{{ jokes|length|pluralize }}</p>
+    </div>
+
+  {% else %}
+    <!-- Empty State -->
+    <div class="card card-single text-center">
+      <div style="font-size: 4rem; margin-bottom: var(--space-4);">😅</div>
+      <h2 class="section-title">No Jokes Yet!</h2>
+      <p class="text-muted mb-6">
+        Looks like our comedy vault is empty. Why not be the first to add a hilarious dad joke?
+      </p>
+      <div>
+        <a href="#" class="btn btn-primary">
+          ➕ Add Your First Joke
+        </a>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Back to Home -->
+  <div class="text-center mt-8">
+    <a href="{% url 'dadjokes:home' %}" class="btn btn-secondary">
+      🏠 Back to Home
+    </a>
+  </div>
+{% endblock %}
+

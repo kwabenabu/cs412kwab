@@ -1,0 +1,157 @@
+{% extends "voter_analytics/base.html" %}
+<!-- file graphs.html -->
+<!-- author Kwabena -->
+<!-- Description: Template for displaying voter analytics graphs and filtering options in the voter_analytics app. -->
+ 
+{% block title %}Voter Analytics - Graphs{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1>Voter Analytics Dashboard</h1>
+            <p class="lead">Visual analysis of voter data and participation patterns</p>
+            
+            <!-- Filter Form -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title">Filter Data</h5>
+                </div>
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-3">
+                            <label for="{{ filter_form.party.id_for_label }}" class="form-label">Party</label>
+                            {{ filter_form.party }}
+                        </div>
+                        <div class="col-md-2">
+                            <label for="{{ filter_form.dob_min_year.id_for_label }}" class="form-label">Min Birth Year</label>
+                            {{ filter_form.dob_min_year }}
+                        </div>
+                        <div class="col-md-2">
+                            <label for="{{ filter_form.dob_max_year.id_for_label }}" class="form-label">Max Birth Year</label>
+                            {{ filter_form.dob_max_year }}
+                        </div>
+                        <div class="col-md-2">
+                            <label for="{{ filter_form.voter_score.id_for_label }}" class="form-label">Voter Score</label>
+                            {{ filter_form.voter_score }}
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Elections Participated</label>
+                            <div class="form-check">
+                                {{ filter_form.v20state }} <label for="{{ filter_form.v20state.id_for_label }}" class="form-check-label">2020 State</label>
+                            </div>
+                            <div class="form-check">
+                                {{ filter_form.v21town }} <label for="{{ filter_form.v21town.id_for_label }}" class="form-check-label">2021 Town</label>
+                            </div>
+                            <div class="form-check">
+                                {{ filter_form.v21primary }} <label for="{{ filter_form.v21primary.id_for_label }}" class="form-check-label">2021 Primary</label>
+                            </div>
+                            <div class="form-check">
+                                {{ filter_form.v22general }} <label for="{{ filter_form.v22general.id_for_label }}" class="form-check-label">2022 General</label>
+                            </div>
+                            <div class="form-check">
+                                {{ filter_form.v23town }} <label for="{{ filter_form.v23town.id_for_label }}" class="form-check-label">2023 Town</label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">Apply Filters</button>
+                            <a href="{% url 'voter_analytics:graphs' %}" class="btn btn-secondary">Clear Filters</a>
+                            <a href="{% url 'voter_analytics:voters' %}" class="btn btn-outline-primary">View Voter List</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Charts Section -->
+            {% if graph_birth_year_html or graph_party_html or graph_elections_html %}
+                <div class="row">
+                    {% if graph_birth_year_html %}
+                        <div class="col-12 mb-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Voter Distribution by Birth Year</h5>
+                                </div>
+                                <div class="card-body">
+                                    {{ graph_birth_year_html|safe }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if graph_party_html %}
+                        <div class="col-md-6 mb-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Party Affiliation Distribution</h5>
+                                </div>
+                                <div class="card-body">
+                                    {{ graph_party_html|safe }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if graph_elections_html %}
+                        <div class="col-md-6 mb-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Election Participation</h5>
+                                </div>
+                                <div class="card-body">
+                                    {{ graph_elections_html|safe }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            {% else %}
+                <!-- Fallback when Plotly is not available -->
+                <div class="alert alert-info" role="alert">
+                    <h4 class="alert-heading">Charts Not Available</h4>
+                    <p>Interactive charts require the Plotly library to be installed. To enable charts, install it with:</p>
+                    <pre><code>pip install plotly</code></pre>
+                    <p class="mb-0">Once installed, refresh this page to see interactive data visualizations.</p>
+                </div>
+                
+                <!-- Basic data summary without charts -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Voters</h5>
+                                <h2 class="text-primary">{{ voters|length }}</h2>
+                                <p class="card-text">Currently filtered voters</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Unique Parties</h5>
+                                <h2 class="text-success">
+                                    {% regroup voters by party as party_list %}
+                                    {{ party_list|length }}
+                                </h2>
+                                <p class="card-text">Different party affiliations</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Avg Voter Score</h5>
+                                <h2 class="text-info">
+                                    {{ average_score|floatformat:1|default:"0.0" }}
+                                </h2>
+                                <p class="card-text">Average participation rate</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,137 @@
+<!-- file show_post.html -->
+<!-- author Kwabena -->
+<!-- Description: Template to display a single post with all its photos in the mini_insta app. -->
+
+{% extends 'insta/base.html' %}
+
+{% block title %}Post by {{ post.profile.display_name }} - Mini Instagram{% endblock %}
+
+{% block content %}
+<!-- Post Header Section -->
+<div class="post-header">
+    <div class="post-author-info">
+        <img src="{{ post.profile.profile_image_url }}" 
+             alt="{{ post.profile.display_name }}'s profile picture"
+             class="post-author-avatar"
+             onerror="this.src='https://via.placeholder.com/50x50/cccccc/666666?text=No+Image'">
+        <div class="post-author-details">
+            <h2><a href="{% url 'show_profile' post.profile.pk %}">{{ post.profile.display_name }}</a></h2>
+            <p class="post-timestamp">{{ post.timestamp|date:"F j, Y \a\t g:i A" }}</p>
+        </div>
+    </div>
+</div>
+
+<!-- Post Content Section -->
+<div class="post-content">
+    <!-- Post Caption -->
+    <div class="likes">❤️ {{ post.get_likes.count }} like{{ post.get_likes.count|pluralize }}</div>
+    {% if user.is_authenticated and can_like %}
+      {% if has_liked %}
+        <form method="post" action="{% url 'delete_like' post.pk %}">
+          {% csrf_token %}
+          <button type="submit">Unlike</button>
+        </form>
+      {% else %}
+        <form method="post" action="{% url 'like' post.pk %}">
+          {% csrf_token %}
+          <button type="submit">Like</button>
+        </form>
+      {% endif %}
+    {% endif %}
+    {% if post.caption %}
+        <div class="post-caption">
+            <p>{{ post.caption }}</p>
+        </div>
+    {% else %}
+        <div class="post-caption">
+            <p class="no-caption">No caption provided</p>
+        </div>
+    {% endif %}
+    
+    <!-- Post Photos -->
+    <div class="post-photos">
+        <h3>Photos</h3>
+        {% with photos=post.get_all_photos %}
+            {% if photos %}
+                <div class="photos-grid">
+                    {% for photo in photos %}
+                        <div class="photo-item">
+                            <img src="{{ photo.get_image_url }}" 
+                                 alt="Photo from post"
+                                 class="post-photo"
+                                 onerror="this.src='https://via.placeholder.com/400x400/cccccc/666666?text=Image+Not+Found'">
+                            <p class="photo-timestamp">{{ photo.timestamp|date:"F j, Y \a\t g:i A" }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="no-photos">
+                    <img src="https://via.placeholder.com/400x300/cccccc/666666?text=No+Photos" 
+                         alt="No photos available" 
+                         class="no-photos-image">
+                    <p>No photos have been added to this post yet.</p>
+                </div>
+            {% endif %}
+        {% endwith %}
+    </div>
+</div>
+
+<!-- Comments Section -->
+<div class="post-details-section">
+    <h3>Comments</h3>
+    {% with comments=post.get_all_comments %}
+        {% if comments %}
+            <ul class="comments">
+                {% for c in comments %}
+                    <li>
+                        <a href="{% url 'show_profile' c.profile.pk %}"><strong>{{ c.profile.display_name }}</strong></a>
+                        <span class="comment-time">• {{ c.timestamp|date:"M j, Y g:i A" }}</span>
+                        <div class="comment-text">{{ c.text }}</div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No comments yet.</p>
+        {% endif %}
+    {% endwith %}
+</div>
+
+<!-- Post Details Section -->
+<div class="post-details-section">
+    <h3>Post Details</h3>
+    <table class="post-details-table">
+        <tr>
+            <td><strong>Author:</strong></td>
+            <td><a href="{% url 'show_profile' post.profile.pk %}">{{ post.profile.display_name }}</a></td>
+        </tr>
+        <tr>
+            <td><strong>Posted on:</strong></td>
+            <td>{{ post.timestamp|date:"l, F j, Y \a\t g:i A" }}</td>
+        </tr>
+        <tr>
+            <td><strong>Caption:</strong></td>
+            <td>
+                {% if post.caption %}
+                    {{ post.caption }}
+                {% else %}
+                    <span class="text-muted">No caption</span>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Number of Photos:</strong></td>
+            <td>{{ post.get_all_photos.count }}</td>
+        </tr>
+    </table>
+</div>
+
+<!-- Navigation -->
+<div class="navigation">
+    <a href="{% url 'show_profile' post.profile.pk %}" class="btn">← Back to {{ post.profile.display_name }}'s Profile</a>
+    <a href="{% url 'show_all_profiles' %}" class="btn">← Back to All Profiles</a>
+    {% if user.is_authenticated and can_edit_post %}
+      <a href="{% url 'update_post' post.pk %}" class="btn">Update</a>
+      <a href="{% url 'delete_post' post.pk %}" class="btn">Delete</a>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,260 @@
+/* file django/static/a2.css
+Author Kwabena
+description CSS file for styling the restaurant website */
+
+body {
+    background-color: #f8f9fa;
+    color: #333;
+    font-family: Arial, sans-serif;
+    /* body */
+}
+img{
+    max-height: 150px;
+    max-width: 150px;
+    size: 150px;
+    border-radius: 50%;
+    border : 3px solid #666;
+    /* image */
+}
+nav{
+    background-color: #e9ecef;
+    text-align: center;
+    height: 100px;
+}
+li{
+    font-size:large;
+    font-family: Arial, sans-serif;
+    background-color: transparent;
+
+}
+h1,h2,h3,h4,h5{
+    font-weight: normal;
+    background: #ffffff;
+    margin: 0;
+    color: #2c3e50;
+}
+
+a, a:visited {
+    color: #495057;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #007bff;
+    text-decoration: underline;
+    background-color: transparent;
+    /* hover */
+}
+
+body {
+    max-width: 960px;
+    margin: 20px auto;
+    padding: 20px auto;
+}
+
+header {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: #ffffff;
+    position: fixed;
+    top: 0px;
+    z-index: 999;
+    border-bottom: 1px solid #dee2e6;
+}
+
+footer {
+    width: 100%;
+    background: #ffffff;
+    position: fixed;
+    bottom: 0px;
+    border-top: 1px solid #dee2e6;
+}
+
+
+.wrapper {              /* centering and margin around whole wrapper element */
+    border: 2px solid;
+    max-width: 100%;
+    position: relative;
+    top: 50px;
+    scroll-padding-top: 100px;
+    /* scroll-padding-bottom: 100px; */
+    padding-bottom: 50px;
+    
+    /* top:100px; */
+    /* bottom: 100px; */
+}
+
+
+div.wrapper h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin: 10px auto;
+    font-size: 2.4 em; 
+
+}
+
+div.wrapper h2 {
+    text-align: left;
+    color: #2c3e50;
+    margin: 5px auto;
+    font-size: 2 em; 
+}
+
+
+section {
+    border: 2px solid #6c757d;    /* border around each event */
+    position: relative;
+    padding-bottom: 4px;
+}
+
+
+nav {
+    justify-self: end;
+    background: #e9ecef;
+    color: #495057;
+    font-size: 2em;
+}
+
+nav li {
+    display: inline-block;
+    margin-left: 20px;
+    font-size: 2em;
+}
+
+nav button {
+    background: none;
+    color: #495057;
+    font-family: Arial;
+    cursor: pointer; 
+    border: 0;
+    font-size: 1.2 em;
+}
+
+.mc-table {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+
+.mc-table-head {
+    border: 1px solid #dee2e6;    /*border around each row */
+    display: table-row;
+    font-size: 1.2em;
+}
+
+.mc-table-head .detail {
+    display: table-cell;
+    color: #2c3e50;
+    font-weight: bold;
+    background-color: #f8f9fa;
+    padding: 5px;
+    position: relative;
+   
+}
+
+.mc-table-row  {
+    display: table-row;
+    border: 1px solid #dee2e6;    /*border around each row */
+    background-color: white;
+}
+
+
+.mc-table-row .detail {
+    color: #495057;
+    display: table-cell;
+    padding: 5px;
+}
+
+.mc-table-row .detail img {
+    max-height: 75px;
+    align-content: right;
+}
+
+/* must have no space before :hover */
+.mc-table-row:hover {
+    background-color: #f8f9fa;    
+    border: 1px solid #6c757d;
+}
+
+.site-form {
+    margin-top: 10px;
+    /* border: 2px solid darkblue; */
+    padding: 10px;
+}
+
+/* style the forms with class site-form */
+.site-form input, .site-form textarea, .site-form select {
+    display: block;
+    margin: 5px 0 0 0;
+    padding: 5px;
+}
+
+/* style the submit button ; didn't quite work?? */
+.site-form input [type="submit"] {
+    background: #007bff;
+    border: 0;
+    color: white;
+    font-size: 1.2em;
+    border-radius: 4px;
+    margin: 5px 0;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+
+/* style the help text in the forms */
+.helptext, .helptext.ul {
+    margin-top: 0 auto;
+    bottom: 20px;
+    color: #bbb;
+    font-size: 0.9em;
+}
+
+/* style the error list in the forms validation */
+.errorlist li {
+    padding: 10px;
+    list-style-type: none;
+    border: 1px solid crimson;
+    color: crimson;
+    margin: 10px 0;
+}
+
+
+.errorlist {
+    padding: 0px;
+}
+
+
+/* responsive styles when width is less than 1400px */
+@media screen and (max-width: 560px) {
+    header h1 {
+        size: 0.8em;
+    }
+
+    nav li {
+        display: block;
+        margin-left: 0px;
+        font-size: 14px;
+        width: 100%;
+    }
+    
+    nav button {
+        background: none;
+        color: #495057;
+        font-family: Arial;
+        cursor: pointer; 
+        border: 0;
+        font-size: 20px;
+    }
+    /* on mobile, display image as max 95% of available width*/
+img {
+        max-width: 95%;
+    }
+}
+
+/* Restaurant: order toppings indent */
+.toppings-group {
+    margin-left: 50px;
+}

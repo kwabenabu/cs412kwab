@@ -1,0 +1,78 @@
+{% extends 'dadjokes/base.html' %}
+
+{% block title %}All Pictures - Dad Jokes Premium{% endblock %}
+
+{% block content %}
+  <h1 class="page-title">📸 Funny Picture Gallery</h1>
+  
+  <div class="text-center mb-6">
+    <p class="text-muted">A curated collection of the funniest pictures and memes</p>
+  </div>
+
+  {% if pictures %}
+    <div class="card-grid">
+      {% for picture in pictures %}
+        <div class="card picture-card">
+          <img src="{{ picture.image_url }}" alt="Funny picture by {{ picture.contributor }}" 
+               style="width: 100%; height: 200px; object-fit: cover; border-radius: var(--radius); margin-bottom: var(--space-4);" />
+          
+          <div class="picture-credit">
+            <strong>📷 {{ picture.contributor }}</strong><br>
+            <span class="text-muted">{{ picture.created|date:"M j, Y g:i A" }}</span>
+          </div>
+          
+          <div class="mt-8">
+            <a href="{% url 'dadjokes:picture_detail' picture.id %}" class="btn btn-primary">
+              🔍 View Full Size
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Gallery Stats -->
+    <div class="card card-single text-center mt-8">
+      <h3 class="section-title">📊 Gallery Stats</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4);">
+        <div>
+          <div style="font-size: 2rem; font-weight: bold; color: var(--primary);">{{ pictures|length }}</div>
+          <div class="text-muted">Funny Picture{{ pictures|length|pluralize }}</div>
+        </div>
+        <div>
+          <div style="font-size: 2rem; font-weight: bold; color: var(--secondary);">100%</div>
+          <div class="text-muted">Guaranteed Laughs</div>
+        </div>
+        <div>
+          <div style="font-size: 2rem; font-weight: bold; color: var(--success);">∞</div>
+          <div class="text-muted">Smile Factor</div>
+        </div>
+      </div>
+    </div>
+
+  {% else %}
+    <!-- Empty State -->
+    <div class="card card-single text-center">
+      <div style="font-size: 4rem; margin-bottom: var(--space-4);">📷</div>
+      <h2 class="section-title">No Pictures Yet!</h2>
+      <p class="text-muted mb-6">
+        Our gallery is waiting for some hilarious content. Share your funniest pictures and memes!
+      </p>
+      <div>
+        <a href="#" class="btn btn-primary">
+          ➕ Add Your First Picture
+        </a>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Navigation -->
+  <div class="text-center mt-8">
+    <a href="{% url 'dadjokes:home' %}" class="btn btn-secondary" style="margin-right: var(--space-2);">
+      🏠 Back to Home
+    </a>
+    <a href="{% url 'dadjokes:jokes' %}" class="btn btn-secondary">
+      😄 View Jokes
+    </a>
+  </div>
+{% endblock %}
+

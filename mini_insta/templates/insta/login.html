@@ -1,0 +1,19 @@
+<!--file login.html-->
+<!--login.html-->
+<!--author Kwabena -->
+<!--Description: Template for user login in the mini_insta app.-->
+{% extends "insta/base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<h2>Login</h2>
+<form method="post" action="{% url 'login' %}">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="hidden" name="next" value="{% firstof request.GET.next request.POST.next '/mini_insta/' %}">
+  <button type="submit">Log in</button>
+  <p>Don't have an account? <a href="{% url 'create_profile' %}">Register</a></p>
+  <p><a href="{% url 'show_all_profiles' %}">Back to all profiles</a></p>
+  
+</form>
+{% endblock %}
+

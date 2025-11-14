@@ -1,0 +1,61 @@
+<!-- File: order.html
+Author: Kwabena
+Description: Order page for restaurant app with form for selecting menu items and entering customer information. -->
+
+<!-- restaurant/templates/restaurant/order.html -->
+{% extends 'restaurant/base.html' %}
+
+{% block content %}
+<div>
+    <h1>Order Page</h1>
+   <form method="post">
+  {% csrf_token %}
+  <h2>Menu</h2>
+  <label>
+    <!-- Checkbox spam -->
+    <input type="checkbox" name="items" value="pizza">
+    Pizza ($12.00)
+  </label>
+  <div class="toppings-group">
+    <label>Toppings:</label><br>
+    <input type="checkbox" name="pizza_toppings" value="pepperoni"> Pepperoni
+    <input type="checkbox" name="pizza_toppings" value="mushrooms"> Mushrooms
+    <input type="checkbox" name="pizza_toppings" value="onions"> Onions
+  </div>
+
+  <label>
+    <!-- Checkbox spam -->
+    <input type="checkbox" name="items" value="burger">
+    Burger ($9.00)
+  </label>
+
+  <label>
+    <input type="checkbox" name="items" value="salad">
+    Salad ($7.00)
+  </label>
+
+  <label>
+    <input type="checkbox" name="items" value="drink">
+    Drink ($2.00)
+  </label>
+  <h2> Todays Specials</h2>
+  <label>
+    <input type="checkbox" name="items" value="special">
+    {{ daily_special.name }} ({{ daily_special.cost }})
+    ({{ daily_special.detail }})
+  </label>
+  <input type="hidden" name="special_name" value="{{ daily_special.name }}">
+  <input type="hidden" name="special_cost" value="{{ daily_special.cost }}">
+  <input type="hidden" name="special_detail" value="{{ daily_special.detail }}">
+  <label>
+    Special Instructions:<br>
+    <textarea name="instructions" rows="3" cols="40"></textarea>
+  </label>
+  <h3>Customer Information</h3>
+  <label>Name: <input type="text" name="customer_name" required></label><br>
+  <label>Phone: <input type="tel" name="customer_phone" required></label><br>
+  <label>Email: <input type="email" name="customer_email" required></label><br>
+  <input type="submit" value="Place Order">
+</form>
+</div>
+{% endblock content %}

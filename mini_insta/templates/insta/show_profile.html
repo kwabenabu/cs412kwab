@@ -1,0 +1,200 @@
+<!-- file show_profile.html -->
+<!-- author Kwabena -->
+<!-- Description: Template to display a user profile in the mini_insta app. -->
+
+
+<!-- mini_insta/templates/mini_insta/show_profile.html -->
+
+
+{% extends 'insta/base.html' %}
+
+{% block title %}{{ profile.display_name }} - Mini Instagram{% endblock %}
+
+{% block content %}
+<!-- Profile Header Section -->
+<div class="profile-header">
+    <div class="profile-info-container">
+        <!-- Large Profile Image -->
+        <div>
+            <img src="{{ profile.profile_image_url }}" 
+                 alt="{{ profile.display_name }}'s profile picture"
+                 class="profile-avatar"
+                 onerror="this.src='https://via.placeholder.com/200x200/cccccc/666666?text=No+Image'">
+        </div>
+        
+        <!-- Profile Information -->
+        <div class="profile-details">
+            <!-- Display Name -->
+            <h1 class="profile-name">{{ profile.display_name }}</h1>
+            
+            <!-- Stats Section (Placeholder for future features) -->
+            <div class="profile-stats">
+                <div><strong>{{ profile.get_all_posts.count }}</strong> posts</div>
+                <div>
+                    <a href="{% url 'show_followers' profile.pk %}"><strong>{{ profile.get_num_followers }}</strong> followers</a>
+                </div>
+                <div>
+                    <a href="{% url 'show_following' profile.pk %}"><strong>{{ profile.get_num_following }}</strong> following</a>
+                </div>
+            </div>
+            
+            <!-- Bio Text -->
+            <div class="profile-bio">
+                {% if profile.bio_text %}
+                    <p>{{ profile.bio_text }}</p>
+                {% else %}
+                    <p class="no-bio">No bio available</p>
+                {% endif %}
+            </div>
+            
+            <!-- Join Date -->
+            <div class="profile-join-date">
+                <strong>Member since:</strong> {{ profile.join_date|date:"F j, Y" }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Profile Details Section -->
+<div class="profile-section">
+    <h2>Profile Details</h2>
+    <table>
+        <tr>
+            <td>Display Name:</td>
+            <td>{{ profile.display_name }}</td>
+        </tr>
+        <tr>
+            <td>Profile Image URL:</td>
+            <td class="word-break">
+                <!-- citation for if block -->
+                <!-- https://docs.djangoproject.com/en/stable/ref/templates/builtins/#if -->
+                {% if profile.profile_image_url %}
+                    <a href="{{ profile.profile_image_url }}" target="_blank">{{ profile.profile_image_url }}</a>
+                     <!-- https://docs.djangoproject.com/en/stable/ref/templates/builtins/#if -->
+                {% else %}
+                    <span class="text-muted">No image URL provided</span>
+                    <!-- end if -->
+                      <!-- https://docs.djangoproject.com/en/stable/ref/templates/builtins/#if -->
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>Bio:</td>
+            <td>
+                    <!-- citation for if block -->
+                    <!-- https://docs.djangoproject.com/en/stable/ref/templates/builtins/#if -->
+                {% if profile.bio_text %}
+                    {{ profile.bio_text }}
+                    <!-- end if -->
+                      <!-- https://docs.djangoproject.com/en/stable/ref/templates/builtins/#if -->
+                {% else %}
+                    <span class="text-muted">No bio provided</span>
+                    <!-- https://docs.djangoproject.com/en/stable/ref/templates/builtins/#if -->
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>Join Date:</td>
+            django built in
+            <td>{{ profile.join_date|date:"l, F j, Y" }}</td>
+        </tr>
+    </table>
+</div>
+
+<!-- Posts Section -->
+<div class="profile-section">
+    <h2>Posts by {{ profile.display_name }}</h2>
+    {% with posts=profile.get_all_posts %}
+        {% if posts %}
+            <div class="posts-grid">
+                {% for post in posts %}
+                    <div class="post-card">
+                        <!-- Post Link -->
+                        <a href="{% url 'show_post' post.pk %}" class="post-link">
+                            <!-- First Photo or Placeholder -->
+                            {% with first_photo=post.get_all_photos.first %}
+                                {% if first_photo %}
+                                    <img src="{{ first_photo.get_image_url }}" 
+                                         alt="Post photo"
+                                         class="post-thumbnail"
+                                         onerror="this.src='https://via.placeholder.com/300x300/cccccc/666666?text=Image+Error'">
+                                {% else %}
+                                    <img src="https://via.placeholder.com/300x300/cccccc/666666?text=No+Image" 
+                                         alt="No image available" 
+                                         class="post-thumbnail no-image">
+                                {% endif %}
+                            {% endwith %}
+                            
+                            <!-- Post Info Overlay -->
+                            <div class="post-info-overlay">
+                                <div class="post-stats">
+                                    <span>📷 {{ post.get_all_photos.count }} photo{{ post.get_all_photos.count|pluralize }}</span>
+                                </div>
+                            </div>
+                        </a>
+                        
+                        <!-- Post Caption and Timestamp -->
+                        <div class="post-details">
+                            {% if post.caption %}
+                                <p class="post-caption">{{ post.caption|truncatewords:10 }}</p>
+                            {% else %}
+                                <p class="post-caption no-caption">No caption</p>
+                            {% endif %}
+                            <p class="post-timestamp">{{ post.timestamp|date:"M j, Y" }}</p>
+                            <a href="{% url 'show_post' post.pk %}" class="view-post-btn">View Post →</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="placeholder-section">
+                <p>No posts yet</p>
+                <p>{{ profile.display_name }} hasn't shared any posts</p>
+            </div>
+        {% endif %}
+    {% endwith %}
+</div>
+
+<!-- Followers/Following Section (Placeholder for future features) -->
+<div class="profile-section">
+    <h2>Social Connections</h2>
+    
+    <div class="social-grid">
+        <!-- Followers -->
+        <div class="social-card">
+            <h3>Followers (0)</h3>
+            <p>People who follow {{ profile.display_name }} will be listed here</p>
+        </div>
+        
+        <!-- Following -->
+        <div class="social-card">
+            <h3>Following (0)</h3>
+            <p>People that {{ profile.display_name }} follows will be listed here</p>
+        </div>
+    </div>
+</div>
+
+<!-- Follow/Unfollow (for logged-in users viewing other profiles) -->
+{% if user.is_authenticated and can_follow %}
+  {% if is_following %}
+    <form method="post" action="{% url 'delete_follow' profile.pk %}">
+      {% csrf_token %}
+      <button type="submit" class="btn">Unfollow</button>
+    </form>
+  {% else %}
+    <form method="post" action="{% url 'follow' profile.pk %}">
+      {% csrf_token %}
+      <button type="submit" class="btn">Follow</button>
+    </form>
+  {% endif %}
+{% endif %}
+
+<!-- Navigation -->
+<div class="navigation">
+    <a href="{% url 'show_all_profiles' %}" class="btn">← Back to All Profiles</a>
+    {% if user.is_authenticated and can_update %}
+      <a href="{% url 'update_profile' %}" class="btn">Update Profile</a>
+      <a href="{% url 'show_feed' %}" class="btn">View Feed</a>
+    {% endif %}
+</div>
+{% endblock %}

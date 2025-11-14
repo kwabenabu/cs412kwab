@@ -1,0 +1,30 @@
+{% extends 'dadjokes/base.html' %}
+
+{% block content %}
+<h1 class="page-title">📸 All Funny Pictures</h1>
+
+{% if pictures %}
+<div class="card-grid">
+    {% for picture in pictures %}
+    <div class="card picture-card">
+        <div class="card-title">Picture #{{ picture.id }}</div>
+        <img src="{{ picture.image_url }}" alt="Funny picture" />
+        <div class="picture-credit">
+            by {{ picture.contributor }}<br>
+            <small>{{ picture.created|date:"M j, Y" }}</small>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card single-item">
+    <div class="card-title">📷 No Pictures Yet</div>
+    <p>Be the first to add a funny picture to our collection!</p>
+</div>
+{% endif %}
+
+<div class="text-center">
+    <a href="{% url 'dadjokes:show_random_joke' %}" class="btn">🎲 Random Content</a>
+    <a href="{% url 'dadjokes:show_all_jokes' %}" class="btn btn-secondary">😄 View Jokes</a>
+</div>
+{% endblock %}

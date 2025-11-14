@@ -1,0 +1,69 @@
+<!-- file create_post_form.html -->
+<!-- author Kwabena -->
+<!-- Description: Template for creating a new post in the mini_insta app. -->
+
+{% extends 'insta/base.html' %}
+
+{% block title %}Create New Post - Mini Instagram{% endblock %}
+
+{% block content %}
+<div class="create-post-container">
+    <h1> Create New Post</h1>
+    
+    <div class="form-container">
+        <form method="POST" enctype="multipart/form-data" class="create-post-form">
+            {% csrf_token %}
+            
+            <!-- Caption Field -->
+            <div class="form-group">
+                <label for="{{ form.caption.id_for_label }}" class="form-label">
+                    📝 Post Caption:
+                </label>
+                {{ form.caption }}
+                {% if form.caption.help_text %}
+                    <small class="help-text">{{ form.caption.help_text }}</small>
+                {% endif %}
+                {% if form.caption.errors %}
+                    <div class="form-errors">
+                        {% for error in form.caption.errors %}
+                            <p class="error-message">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Image File Upload (one or more images) -->
+            <div class="form-group">
+                <label for="files" class="form-label">
+                    📷 Upload image file(s):
+                </label>
+                <input type="file" id="files" name="files" class="form-input" multiple>
+                <small class="help-text">
+                    You may select one or more images to upload.
+                </small>
+            </div>
+            
+            <!-- Form Buttons -->
+            <div class="form-buttons">
+                <button type="submit" class="btn btn-primary">
+                     Create Post
+                </button>
+                <a href="{% url 'show_all_profiles' %}" class="btn btn-secondary">
+                     Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Form Instructions -->
+    <div class="form-instructions">
+        <h3>📋 Instructions:</h3>
+        <ul>
+            <li>Write a creative caption for your post (optional)</li>
+            <li>Optionally select one or more image files to upload</li>
+            <li>Click "Create Post" to share with the world!</li>
+        </ul>
+    </div>
+</div>
+
+{% endblock %}
