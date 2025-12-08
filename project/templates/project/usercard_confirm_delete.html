@@ -1,0 +1,10 @@
+{% extends "project/base.html" %}
+{% block content %}
+<h1>Delete User Card</h1>
+<p>Are you sure you want to delete <strong>{{ usercard }}</strong> from your collection?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirm Delete</button>
+    <a href="{% url 'project:usercard_detail' usercard.pk %}">Cancel</a>
+</form>
+{% endblock %}

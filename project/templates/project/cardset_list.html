@@ -1,0 +1,33 @@
+{% extends "project/base.html" %}
+{% block content %}
+<h1>Card Sets</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Year</th>
+            <th>Brand</th>
+            <th>Sport</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for set in card_sets %}
+        <tr>
+            <td>{{ set.name }}</td>
+            <td>{{ set.release_year }}</td>
+            <td>{{ set.brand }}</td>
+            <td>{{ set.sport }}</td>
+            <td>
+                <a href="{% url 'project:cardset_detail' set.pk %}">View</a> |
+                <a href="{% url 'project:cardset_update' set.pk %}">Edit</a> |
+                <a href="{% url 'project:cardset_delete' set.pk %}">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">No card sets found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'project:cardset_create' %}">Add New Card Set</a>
+{% endblock %}

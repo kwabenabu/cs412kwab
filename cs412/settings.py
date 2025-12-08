@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'mini_insta', # Installed an app for the Mini Instagram website (assignment 3-7)
     'voter_analytics', # Installed an app for the Voter Analytics website (assignment 8)
     'dadjokes',
+    'project', # Soccer trading card portfolio system
 ]
 
 MIDDLEWARE = [

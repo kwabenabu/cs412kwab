@@ -1,0 +1,15 @@
+{% extends "project/base.html" %}
+{% block content %}
+<h1>Card Set Detail</h1>
+<ul>
+    <li><strong>Name:</strong> {{ cardset.name }}</li>
+    <li><strong>Year:</strong> {{ cardset.release_year }}</li>
+    <li><strong>Brand:</strong> {{ cardset.brand }}</li>
+    <li><strong>Sport:</strong> {{ cardset.sport }}</li>
+    <li><strong>Created:</strong> {{ cardset.created_at }}</li>
+    <li><strong>Updated:</strong> {{ cardset.updated_at }}</li>
+</ul>
+<a href="{% url 'project:cardset_update' cardset.pk %}">Edit</a> |
+<a href="{% url 'project:cardset_delete' cardset.pk %}">Delete</a> |
+<a href="{% url 'project:cardset_list' %}">Back to List</a>
+{% endblock %}

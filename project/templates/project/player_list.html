@@ -1,0 +1,167 @@
+{% extends 'project/base.html' %}
+
+{% block title %}Players - Soccer Card Portfolio{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="bi bi-people"></i> Soccer Players</h2>
+            <a href="{% url 'project:player_create' %}" class="btn btn-success mb-3">Add New Player</a>
+        <p class="text-muted">Browse all players in the database</p>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h5>Filter Players</h5>
+                <form method="get" class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Position</label>
+                        <select name="position" class="form-select">
+                            <option value="">All Positions</option>
+                            {% for position in positions %}
+                                <option value="{{ position }}" {% if position == current_position %}selected{% endif %}>
+                                    {{ position }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Country</label>
+                        <input type="text" name="country" class="form-control" 
+                               value="{{ current_country }}" placeholder="Enter country">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Team</label>
+                        <input type="text" name="team" class="form-control" 
+                               value="{{ current_team }}" placeholder="Enter team name">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Sort By</label>
+                        <select name="sort" class="form-select">
+                            <option value="last_name" {% if current_sort == 'last_name' %}selected{% endif %}>Name A-Z</option>
+                            <option value="-card_count" {% if current_sort == '-card_count' %}selected{% endif %}>Most Cards</option>
+                            <option value="birth_year" {% if current_sort == 'birth_year' %}selected{% endif %}>Youngest</option>
+                            <option value="-birth_year" {% if current_sort == '-birth_year' %}selected{% endif %}>Oldest</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-funnel"></i> Apply Filters
+                        </button>
+                        <a href="{% url 'project:player_list' %}" class="btn btn-outline-secondary ms-2">
+                            <i class="bi bi-x-circle"></i> Clear
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Results Count -->
+<div class="row mb-3">
+    <div class="col-12">
+        <p class="text-muted">
+            Showing {{ players|length }} of {{ paginator.count }} player{{ paginator.count|pluralize }}
+        </p>
+    </div>
+</div>
+
+<!-- Players Grid -->
+<div class="row">
+    {% for player in players %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-start">
+                    {% if player.image %}
+                        <img src="{{ player.image }}" alt="{{ player.full_name }}" 
+                             class="rounded-circle me-3" style="width: 80px; height: 80px; object-fit: cover;">
+                    {% else %}
+                        <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-3" 
+                             style="width: 80px; height: 80px;">
+                            <i class="bi bi-person text-white" style="font-size: 2rem;"></i>
+                        </div>
+                    {% endif %}
+                    <div class="flex-grow-1">
+                        <h5 class="card-title mb-1">
+                            <a href="{% url 'project:player_detail' player.pk %}" class="text-decoration-none">
+                                {{ player.full_name }}
+                            </a>
+                        </h5>
+                        <p class="card-text">
+                            <span class="badge bg-primary">{{ player.get_position_display }}</span>
+                            <br>
+                            <strong>{{ player.club_team }}</strong>
+                            <br>
+                            <small class="text-muted">{{ player.country }} • Age {{ player.age }}</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="badge bg-secondary">
+                        {{ player.card_count }} card{{ player.card_count|pluralize }}
+                    </span>
+                    <a href="{% url 'project:player_detail' player.pk %}" class="btn btn-outline-primary btn-sm">
+                        View Details <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info text-center">
+            <i class="bi bi-info-circle"></i>
+            No players found matching your criteria.
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+{% if is_paginated %}
+<div class="row">
+    <div class="col-12">
+        <nav aria-label="Player pagination">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}">
+                            Previous
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ num }}">{{ num }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}">
+                            Next
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "project/base.html" %}
+{% block content %}
+<h1>Card List</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Set</th>
+            <th>Card #</th>
+            <th>Player</th>
+            <th>Rarity</th>
+            <th>Value</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for card in cards %}
+        <tr>
+            <td>{% if card.image %}<img src="{{ card.image }}" alt="Card image" style="height:60px;" />{% endif %}</td>
+            <td>{{ card.set.name }} ({{ card.set.release_year }})</td>
+            <td>{{ card.card_number }}</td>
+            <td>{{ card.player.full_name }}</td>
+            <td>{{ card.get_rarity_display }}</td>
+            <td>${{ card.estimated_value }}</td>
+            <td>
+                <a href="{% url 'project:card_detail' card.pk %}">View</a> |
+                <a href="{% url 'project:card_update' card.pk %}">Edit</a> |
+                <a href="{% url 'project:card_delete' card.pk %}">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="7">No cards found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'project:card_create' %}">Add New Card</a>
+{% endblock %}

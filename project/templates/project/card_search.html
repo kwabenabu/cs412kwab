@@ -1,0 +1,42 @@
+{% extends "project/base.html" %}
+{% block content %}
+<h1>Card Search</h1>
+<form method="get">
+    {{ form.as_p }}
+    <button type="submit">Search</button>
+</form>
+
+{% if search_results %}
+    <h2>Results</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Set</th>
+                <th>Card #</th>
+                <th>Player</th>
+                <th>Rarity</th>
+                <th>Value</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for card in search_results %}
+            <tr>
+                <td>{% if card.image %}<img src="{{ card.image }}" alt="Card image" style="height:60px;" />{% endif %}</td>
+                <td>{{ card.set.name }} ({{ card.set.release_year }})</td>
+                <td>{{ card.card_number }}</td>
+                <td>{{ card.player.full_name }}</td>
+                <td>{{ card.get_rarity_display }}</td>
+                <td>${{ card.estimated_value }}</td>
+                <td>
+                    <a href="{% url 'project:card_detail' card.pk %}">View</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="7">No cards found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}

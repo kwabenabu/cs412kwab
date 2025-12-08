@@ -1,0 +1,210 @@
+{% extends 'project/base.html' %}
+
+{% block title %}Home - Soccer Card Portfolio{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="jumbotron bg-primary text-white p-5 rounded mb-4">
+            <h1 class="display-4">
+                <i class="bi bi-trophy"></i> Soccer Card Portfolio
+            </h1>
+            <p class="lead">Track, manage, and trade your soccer trading card collection</p>
+            <hr class="my-4 text-white">
+            <p>Browse players, discover rare cards, and build your ultimate collection</p>
+            <a class="btn btn-light btn-lg" href="{% url 'project:card_search' %}" role="button">
+                <i class="bi bi-search"></i> Search Cards
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-center border-primary">
+            <div class="card-body">
+                <i class="bi bi-people-fill text-primary" style="font-size: 2rem;"></i>
+                <h5 class="card-title mt-2">{{ total_players }}</h5>
+                <p class="card-text">Players</p>
+                <a href="{% url 'project:player_list' %}" class="btn btn-outline-primary btn-sm">View All</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center border-success">
+            <div class="card-body">
+                <i class="bi bi-collection-fill text-success" style="font-size: 2rem;"></i>
+                <h5 class="card-title mt-2">{{ total_cards }}</h5>
+                <p class="card-text">Trading Cards</p>
+                <a href="{% url 'project:card_list' %}" class="btn btn-outline-success btn-sm">Browse Cards</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center border-warning">
+            <div class="card-body">
+                <i class="bi bi-box-seam text-warning" style="font-size: 2rem;"></i>
+                <h5 class="card-title mt-2">{{ total_sets }}</h5>
+                <p class="card-text">Card Sets</p>
+                <a href="{% url 'project:cardset_list' %}" class="btn btn-outline-warning btn-sm">View Sets</a>
+            </div>
+        </div>
+    </div>
+    {% if user.is_authenticated %}
+    <div class="col-md-3">
+        <div class="card text-center border-info">
+            <div class="card-body">
+                <i class="bi bi-person-badge text-info" style="font-size: 2rem;"></i>
+                <h5 class="card-title mt-2">{{ collection_count|default:0 }}</h5>
+                <p class="card-text">My Cards</p>
+                <a href="{% url 'project:user_collection' %}" class="btn btn-outline-info btn-sm">My Collection</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- User Collection Summary (if authenticated) -->
+{% if user.is_authenticated and collection_count > 0 %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="bi bi-person"></i> Your Collection Summary</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-6">
+                        <h4 class="text-primary">${{ collection_value|floatformat:2 }}</h4>
+                        <p class="text-muted">Total Invested</p>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="{% url 'project:add_card' %}" class="btn btn-success">
+                            <i class="bi bi-plus-circle"></i> Add New Card
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="row">
+    <!-- Recent Players -->
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-star"></i> Featured Players</h5>
+            </div>
+            <div class="card-body">
+                {% for player in recent_players %}
+                <div class="d-flex align-items-center mb-3">
+                    {% if player.image %}
+                        <img src="{{ player.image }}" alt="{{ player.full_name }}" class="player-avatar me-3">
+                    {% else %}
+                        <div class="player-avatar bg-secondary d-flex align-items-center justify-content-center me-3">
+                            <i class="bi bi-person text-white"></i>
+                        </div>
+                    {% endif %}
+                    <div>
+                        <h6 class="mb-0">
+                            <a href="{% url 'project:player_detail' player.pk %}" class="text-decoration-none">
+                                {{ player.full_name }}
+                            </a>
+                        </h6>
+                        <small class="text-muted">{{ player.position }} - {{ player.club_team }}</small>
+                        <br>
+                        <small class="text-muted">{{ player.country }} | Age: {{ player.age }}</small>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-muted">No players available.</p>
+                {% endfor %}
+                <div class="text-center mt-3">
+                    <a href="{% url 'project:player_list' %}" class="btn btn-outline-primary">
+                        View All Players <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Most Valuable Cards -->
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-gem"></i> Most Valuable Cards</h5>
+            </div>
+            <div class="card-body">
+                {% for card in valuable_cards %}
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h6 class="mb-0">
+                            <a href="{% url 'project:card_detail' card.pk %}" class="text-decoration-none">
+                                {{ card.player.full_name }}
+                            </a>
+                        </h6>
+                        <small class="text-muted">{{ card.set.name }} #{{ card.card_number }}</small>
+                        <br>
+                        <span class="badge rarity-{{ card.rarity|lower }}">{{ card.get_rarity_display }}</span>
+                    </div>
+                    <div class="text-end">
+                        <h6 class="mb-0 text-success">${{ card.estimated_value }}</h6>
+                        {% if card.serial_number %}
+                            <small class="text-muted">{{ card.serial_number }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-muted">No cards available.</p>
+                {% endfor %}
+                <div class="text-center mt-3">
+                    <a href="{% url 'project:card_list' %}?sort=-estimated_value" class="btn btn-outline-success">
+                        View All Cards <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+{% if user.is_authenticated %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-lightning"></i> Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <a href="{% url 'project:add_card' %}" class="btn btn-outline-primary w-100 mb-2">
+                            <i class="bi bi-plus-circle"></i><br>Add Card
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{% url 'project:card_search' %}" class="btn btn-outline-secondary w-100 mb-2">
+                            <i class="bi bi-search"></i><br>Search Cards
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{% url 'project:user_collection' %}" class="btn btn-outline-info w-100 mb-2">
+                            <i class="bi bi-collection"></i><br>My Collection
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{% url 'project:card_list' %}?sort=-created_at" class="btn btn-outline-success w-100 mb-2">
+                            <i class="bi bi-clock"></i><br>Latest Cards
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

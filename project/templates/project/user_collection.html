@@ -1,0 +1,40 @@
+{% extends "project/base.html" %}
+{% block content %}
+<h1>My Card Collection</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Card</th>
+            <th>Player</th>
+            <th>Set</th>
+            <th>Purchase Price</th>
+            <th>Purchase Date</th>
+            <th>Grade</th>
+            <th>Condition</th>
+            <th>For Sale</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user_card in user_cards %}
+        <tr>
+            <td>{{ user_card.card }}</td>
+            <td>{{ user_card.card.player.full_name }}</td>
+            <td>{{ user_card.card.set.name }}</td>
+            <td>${{ user_card.purchase_price }}</td>
+            <td>{{ user_card.purchase_date }}</td>
+            <td>{{ user_card.get_grade_display }} {% if user_card.grade_score %}({{ user_card.grade_score }}){% endif %}</td>
+            <td>{{ user_card.condition_note }}</td>
+            <td>{% if user_card.for_sale %}Yes{% else %}No{% endif %}</td>
+            <td>
+                <a href="{% url 'project:usercard_detail' user_card.pk %}">View</a> |
+                <a href="{% url 'project:edit_usercard' user_card.pk %}">Edit</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="9">No cards in your collection.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'project:add_card' %}">Add Card to Collection</a>
+{% endblock %}

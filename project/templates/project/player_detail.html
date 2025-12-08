@@ -1,0 +1,140 @@
+{% extends 'project/base.html' %}
+
+{% block title %}{{ player.full_name }} - Soccer Card Portfolio{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'project:home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'project:player_list' %}">Players</a></li>
+                <li class="breadcrumb-item active">{{ player.full_name }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Player Info -->
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            {% if player.image %}
+                <img src="{{ player.image }}" class="card-img-top" alt="{{ player.full_name }}" 
+                     style="height: 300px; object-fit: cover;">
+            {% else %}
+                <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" 
+                     style="height: 300px;">
+                    <i class="bi bi-person text-white" style="font-size: 4rem;"></i>
+                </div>
+            {% endif %}
+            <div class="card-body">
+                <h4 class="card-title">{{ player.full_name }}</h4>
+                <div class="mb-3">
+                    <span class="badge bg-primary fs-6">{{ player.get_position_display }}</span>
+                </div>
+                
+                <table class="table table-sm">
+                    <tr>
+                        <td><strong>Club:</strong></td>
+                        <td>{{ player.club_team }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Country:</strong></td>
+                        <td>{{ player.country }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Age:</strong></td>
+                        <td>{{ player.age }} ({{ player.birth_year }})</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Player Stats -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="bi bi-bar-chart"></i> Card Statistics</h6>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-6">
+                        <h5 class="text-primary">{{ total_cards }}</h5>
+                        <small class="text-muted">Total Cards</small>
+                    </div>
+                    <div class="col-6">
+                        <h5 class="text-success">${{ avg_value|floatformat:0|default:"0" }}</h5>
+                        <small class="text-muted">Avg Value</small>
+                    </div>
+                </div>
+                {% if max_value %}
+                <hr>
+                <div class="text-center">
+                    <h6 class="text-warning">${{ max_value }}</h6>
+                    <small class="text-muted">Highest Value Card</small>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Player Cards -->
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-collection"></i> Cards ({{ cards|length }})</h5>
+                <a href="{% url 'project:card_list' %}?player={{ player.full_name }}" class="btn btn-outline-primary btn-sm">
+                    <i class="bi bi-search"></i> Search All Cards
+                </a>
+            </div>
+            <div class="card-body">
+                {% if cards %}
+                    <div class="row">
+                        {% for card in cards %}
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="card h-100 border-start border-4 border-primary">
+                                {% if card.image %}
+                                    <img src="{{ card.image }}" class="card-img-top" alt="Card image" 
+                                         style="height: 150px; object-fit: cover;">
+                                {% else %}
+                                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" 
+                                         style="height: 150px;">
+                                        <i class="bi bi-image text-muted" style="font-size: 2rem;"></i>
+                                    </div>
+                                {% endif %}
+                                <div class="card-body p-2">
+                                    <h6 class="card-title mb-1">
+                                        <a href="{% url 'project:card_detail' card.pk %}" class="text-decoration-none">
+                                            {{ card.set.name }}
+                                        </a>
+                                    </h6>
+                                    <p class="card-text">
+                                        <small class="text-muted">#{{ card.card_number }}</small>
+                                        <br>
+                                        <span class="badge rarity-{{ card.rarity|lower }} small">
+                                            {{ card.get_rarity_display }}
+                                        </span>
+                                    </p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <strong class="text-success">${{ card.estimated_value }}</strong>
+                                        {% if card.serial_number %}
+                                            <small class="text-muted">{{ card.serial_number }}</small>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info text-center">
+                        <i class="bi bi-info-circle"></i>
+                        No cards available for this player yet.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

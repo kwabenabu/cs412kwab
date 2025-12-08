@@ -1,0 +1,22 @@
+{% extends "project/base.html" %}
+{% block content %}
+<h1>User Card Detail</h1>
+<ul>
+    <li><strong>Card:</strong> {{ usercard.card }}</li>
+    <li><strong>Player:</strong> {{ usercard.card.player.full_name }}</li>
+    <li><strong>Set:</strong> {{ usercard.card.set.name }}</li>
+    <li><strong>Purchase Price:</strong> ${{ usercard.purchase_price }}</li>
+    <li><strong>Purchase Date:</strong> {{ usercard.purchase_date }}</li>
+    <li><strong>Grade:</strong> {{ usercard.get_grade_display }} {% if usercard.grade_score %}({{ usercard.grade_score }}){% endif %}</li>
+    <li><strong>Condition:</strong> {{ usercard.condition_note }}</li>
+    <li><strong>For Sale:</strong> {% if usercard.for_sale %}Yes{% else %}No{% endif %}</li>
+    <li><strong>Sale Price:</strong> {% if usercard.sale_price %}${{ usercard.sale_price }}{% endif %}</li>
+    <li><strong>Current Value Estimate:</strong> ${{ usercard.current_value_estimate }}</li>
+    <li><strong>Profit/Loss:</strong> ${{ usercard.profit_loss }}</li>
+    <li><strong>Created:</strong> {{ usercard.created_at }}</li>
+    <li><strong>Updated:</strong> {{ usercard.updated_at }}</li>
+</ul>
+<a href="{% url 'usercard_update' usercard.pk %}">Edit</a> |
+<a href="{% url 'usercard_delete' usercard.pk %}">Delete</a> |
+<a href="{% url 'project:usercard_list' %}">Back to Collection</a>
+{% endblock %}

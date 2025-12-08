@@ -1,0 +1,22 @@
+{% extends "project/base.html" %}
+{% block content %}
+<h1>Card Detail</h1>
+<div>
+    {% if card.image %}
+        <img src="{{ card.image }}" alt="Card image" style="height:120px;" />
+    {% endif %}
+    <ul>
+        <li><strong>Set:</strong> {{ card.set.name }} ({{ card.set.release_year }})</li>
+        <li><strong>Card #:</strong> {{ card.card_number }}</li>
+        <li><strong>Player:</strong> {{ card.player.full_name }}</li>
+        <li><strong>Rarity:</strong> {{ card.get_rarity_display }}</li>
+        <li><strong>Serial Number:</strong> {{ card.serial_number }}</li>
+        <li><strong>Estimated Value:</strong> ${{ card.estimated_value }}</li>
+        <li><strong>Created:</strong> {{ card.created_at }}</li>
+        <li><strong>Updated:</strong> {{ card.updated_at }}</li>
+    </ul>
+    <a href="{% url 'card_update' card.pk %}">Edit</a> |
+    <a href="{% url 'card_delete' card.pk %}">Delete</a> |
+    <a href="{% url 'project:card_list' %}">Back to List</a>
+</div>
+{% endblock %}
