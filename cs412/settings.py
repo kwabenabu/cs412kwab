@@ -1,5 +1,3 @@
-# Redirect users to home after login
-LOGIN_REDIRECT_URL = '/project/'
 # File: cs412/settings.py
 # Description: The Django settings file is responsible for installed apps, 
 # database (SQLite), static and media file handling, and deployment behavior for both 
