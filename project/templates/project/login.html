@@ -13,7 +13,7 @@
         {% endif %}
         <form method="post" action="{% url 'project:login' %}">
             {% csrf_token %}
-            <input type="hidden" name="next" value="{% firstof request.GET.next request.POST.next '/project/' %}">
+            <input type="hidden" name="next" value="{% firstof request.GET.next request.POST.next url 'project:home' %}">
             <div class="mb-3">
                 <label class="form-label" for="{{ form.username.id_for_label }}">Username</label>
                 <input
