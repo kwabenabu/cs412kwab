@@ -1,17 +1,41 @@
 import React from 'react';
 import { View, Text, FlatList, Image, StyleSheet } from 'react-native';
-import { mockPlayers } from '../../src/mockData';
+
+
+
+const API_URL = 'https://cs-webapps.bu.edu/kwabamp/project/api/players/';
 
 export default function PlayersListScreen() {
+  const [players, setPlayers] = React.useState<any[]>([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    fetch(API_URL)
+      .then((res) => res.json())
+      .then((data) => {
+        setPlayers(data.results || data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Players</Text>
       <FlatList
-        data={mockPlayers}
-        keyExtractor={(item) => item.id.toString()}
+        data={players}
+        keyExtractor={(item) => item.id?.toString() || item.pk?.toString()}
         renderItem={({ item }) => (
           <View style={styles.player}>
-            <Image source={{ uri: item.image }} style={styles.image} />
+            {item.image ? (
+              <Image source={{ uri: item.image }} style={styles.image} />
+            ) : (
+              <View style={styles.placeholder} />
+            )}
             <View style={styles.info}>
               <Text style={styles.name}>{item.full_name}</Text>
               <Text>{item.position} - {item.club_team}</Text>

@@ -16,7 +16,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.shortcuts import redirect
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -28,10 +27,7 @@ urlpatterns = [
     path('restaurant/', include('restaurant.urls')),
     path('mini_insta/', include('mini_insta.urls')),
     path('voter_analytics/', include('voter_analytics.urls')),
-    path('project/', include('project.urls')),  # Soccer trading card portfolio
-
-    # Redirect /login/ to /project/login/
-    path('login/', lambda request: redirect('project:login', permanent=False)),
+    path('project/', include(('project.urls', 'project'), namespace='project')),  # Soccer trading card portfolio
 
 ]+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

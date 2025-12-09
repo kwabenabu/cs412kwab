@@ -1,19 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, ActivityIndicator } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { mockCards, Card } from '../../src/mockData';
+
+const API_URL = 'https://cs-webapps.bu.edu/kwabamp/project/api/cards/';
 
 export default function CardDetailScreen() {
   const { cardId } = useLocalSearchParams();
   const resolvedCardId = Array.isArray(cardId) ? cardId[0] : cardId;
-  const [card, setCard] = useState<Card | null>(null);
+  const [card, setCard] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!resolvedCardId) return;
     setLoading(true);
-    const match = mockCards.find((item) => item.id.toString() === (resolvedCardId ?? '').toString());
-    setCard(match ?? null);
-    setLoading(false);
+    fetch(`${API_URL}${resolvedCardId}/`)
+      .then((res) => res.json())
+      .then((data) => {
+        setCard(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, [resolvedCardId]);
 
   if (loading) {

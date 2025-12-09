@@ -76,21 +76,42 @@ const styles = StyleSheet.create({
   container: { padding: 20, backgroundColor: '#fff' },
   title: { fontSize: 22, fontWeight: 'bold', marginBottom: 8 },
   helper: { fontSize: 14, color: '#555', marginBottom: 16 },
+  label: { fontSize: 14, fontWeight: 'bold', marginTop: 12, marginBottom: 6 },
+  input: {
+    borderWidth: 1,
+  const [selectedPlayer, setSelectedPlayer] = useState<number | null>(null);
+  const [cardNumber, setCardNumber] = useState('');
+  const [rarity, setRarity] = useState('');
+  const [estimatedValue, setEstimatedValue] = useState('');
+  const [players, setPlayers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const API_URL = 'https://cs-webapps.bu.edu/kwabamp/project/api/players/';
+
+  React.useEffect(() => {
+    fetch(API_URL)
+      .then((res) => res.json())
+      .then((data) => {
+        setPlayers(data.results || data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+// Styles should be outside the component
+const styles = StyleSheet.create({
+  container: { padding: 20, backgroundColor: '#fff' },
+  title: { fontSize: 22, fontWeight: 'bold', marginBottom: 8 },
+  helper: { fontSize: 14, color: '#555', marginBottom: 16 },
   label: { fontSize: 14, fontWeight: '600', marginTop: 12, marginBottom: 6 },
   input: {
     borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
     fontSize: 16,
+    marginBottom: 8,
   },
   button: {
     marginTop: 20,
     backgroundColor: '#2563eb',
     paddingVertical: 12,
-    borderRadius: 10,
-    alignItems: 'center',
   },
-  buttonText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
 });

@@ -1,20 +1,43 @@
 import React from 'react';
 import { View, Text, FlatList, Image, StyleSheet, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
-import { mockCards } from '../../src/mockData';
+
+
+
+const API_URL = 'https://cs-webapps.bu.edu/kwabamp/project/api/cards/';
 
 export default function CardsListScreen() {
+  const [cards, setCards] = React.useState<any[]>([]);
+  const [loading, setLoading] = React.useState(true);
   const router = useRouter();
+
+  React.useEffect(() => {
+    fetch(API_URL)
+      .then((res) => res.json())
+      .then((data) => {
+        setCards(data.results || data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Soccer Trading Cards</Text>
       <FlatList
-        data={mockCards}
-        keyExtractor={(item) => item.id.toString()}
+        data={cards}
+        keyExtractor={(item) => item.id?.toString() || item.pk?.toString()}
         renderItem={({ item }) => (
           <Pressable onPress={() => router.push({ pathname: '/card_detail', params: { cardId: item.id } })} style={styles.card}>
-            <Image source={{ uri: item.image }} style={styles.image} />
+            {item.image ? (
+              <Image source={{ uri: item.image }} style={styles.image} />
+            ) : (
+              <View style={styles.placeholder} />
+            )}
             <View style={styles.info}>
               <Text style={styles.cardName}>{item.set?.name} #{item.card_number}</Text>
               <Text>{item.player?.full_name}</Text>
