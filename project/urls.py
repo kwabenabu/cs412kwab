@@ -1,3 +1,8 @@
+"""
+File: project/urls.py
+Author: kwabena kwabena@bu.edu
+Description: URL routing for trading card app, including user authentication and home page.
+"""
 from django.urls import path
 from django.views.generic import TemplateView
 

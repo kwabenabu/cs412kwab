@@ -1,3 +1,8 @@
+"""
+File: project/views.py
+Author: kwabena kwabena@bu.edu
+Description: Django views for trading card app, including user registration, profile, and card management.
+"""
 from django.contrib.auth.forms import UserCreationForm
 
 def register_view(request):

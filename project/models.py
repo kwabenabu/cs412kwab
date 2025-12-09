@@ -1,3 +1,8 @@
+"""
+File: project/models.py
+Author: kwabena kwabena@bu.edu
+Description: Django models for trading card app, including user profiles, cards, players, and sets.
+"""
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator

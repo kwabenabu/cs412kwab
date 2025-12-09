@@ -1,3 +1,8 @@
+"""
+File: project/forms.py
+Author: kwabena kwabena@bu.edu
+Description: Django forms for user registration and profile editing in the trading card app.
+"""
 from django import forms
 from django.contrib.auth.models import User
 from .models import UserCard, Card, Player, CardSet, Profile
