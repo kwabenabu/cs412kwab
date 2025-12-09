@@ -1,6 +1,11 @@
 {% extends "project/base.html" %}
 {% block content %}
 <h2>Register</h2>
+{% if form.errors %}
+  <div class="alert alert-danger">
+    {{ form.errors }}
+  </div>
+{% endif %}
 <form method="post" action="">
   {% csrf_token %}
   {{ form.as_p }}
