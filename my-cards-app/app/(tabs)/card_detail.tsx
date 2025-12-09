@@ -1,24 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, ActivityIndicator } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-
-const API_URL = 'http://10.193.204.31:8000/project/card/';
+import { mockCards, Card } from '../../src/mockData';
 
 export default function CardDetailScreen() {
   const { cardId } = useLocalSearchParams();
-  const [card, setCard] = useState(null);
+  const resolvedCardId = Array.isArray(cardId) ? cardId[0] : cardId;
+  const [card, setCard] = useState<Card | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!cardId) return;
-    fetch(`${API_URL}${cardId}/`)
-      .then((res) => res.json())
-      .then((data) => {
-        setCard(data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, [cardId]);
+    setLoading(true);
+    const match = mockCards.find((item) => item.id.toString() === (resolvedCardId ?? '').toString());
+    setCard(match ?? null);
+    setLoading(false);
+  }, [resolvedCardId]);
 
   if (loading) {
     return <ActivityIndicator size="large" style={{ flex: 1 }} />;

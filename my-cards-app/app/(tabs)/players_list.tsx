@@ -1,39 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Image, StyleSheet, ActivityIndicator } from 'react-native';
-
-const API_URL = 'http://10.193.204.31:8000/project/api/players/';
+import React from 'react';
+import { View, Text, FlatList, Image, StyleSheet } from 'react-native';
+import { mockPlayers } from '../../src/mockData';
 
 export default function PlayersListScreen() {
-  const [players, setPlayers] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch(API_URL)
-      .then((res) => res.json())
-      .then((data) => {
-        setPlayers(data.results || data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, []);
-
-  if (loading) {
-    return <ActivityIndicator size="large" style={{ flex: 1 }} />;
-  }
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Players</Text>
       <FlatList
-        data={players}
-        keyExtractor={(item) => item.id?.toString() || item.pk?.toString()}
+        data={mockPlayers}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.player}>
-            {item.image ? (
-              <Image source={{ uri: item.image }} style={styles.image} />
-            ) : (
-              <View style={styles.placeholder} />
-            )}
+            <Image source={{ uri: item.image }} style={styles.image} />
             <View style={styles.info}>
               <Text style={styles.name}>{item.full_name}</Text>
               <Text>{item.position} - {item.club_team}</Text>
