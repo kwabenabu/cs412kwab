@@ -11,8 +11,8 @@ urlpatterns = [
     # User auth/profile
     path('register/', views.register_view, name='register'),
     path('login/', auth_views.LoginView.as_view(template_name='project/login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='logout_confirmation'), name='logout'),
-    path('logged_out/', TemplateView.as_view(template_name='project/logged_out.html'), name='logout_confirmation'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='project:project_logout_confirmation'), name='logout'),
+    path('logged_out/', TemplateView.as_view(template_name='project/logged_out.html'), name='project_logout_confirmation'),
     path('profile/edit/', views.profile_edit_view, name='profile_edit'),
 
     # Home page
