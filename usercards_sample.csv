@@ -1,0 +1,4 @@
+user,card,purchase_price,purchase_date,grade,grade_score,condition_note,for_sale,sale_price
+kwabamp1,1,4500,2023-09-01,Gem Mint,10,Perfect,TRUE,6000
+kwabamp1,2,2500,2023-09-01,NM-MT,8,Minor edge wear,FALSE,
+kwabamp1,3,180,2023-09-01,EX,6,Surface scratch,FALSE,

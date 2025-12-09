@@ -1,0 +1,8 @@
+player_first_name,player_last_name,set_name,card_number,rarity,serial_number,image,estimated_value,is_numbered,created_at
+Lionel,Messi,2022-23 Topps Chrome,1,Superfractor,1,,5000,TRUE,2023-08-01
+Cristiano,Ronaldo,2022-23 Panini Prizm,7,Gold,10,,3000,TRUE,2023-08-01
+Kylian,Mbappe,2021-22 Topps Finest,10,Base,, ,200,FALSE,2022-09-15
+Kevin,De Bruyne,2021-22 Panini Mosaic,17,Silver,, ,150,FALSE,2022-10-10
+Virgil,van Dijk,2020-21 Topps Museum Collection,4,Patch Auto,5,,1200,TRUE,2021-12-20
+Erling,Haaland,2022-23 Topps Chrome,9,Refractor,, ,400,FALSE,2023-08-01
+Neymar,Junior,2022-23 Panini Prizm,11,Base,, ,100,FALSE,2023-08-01
